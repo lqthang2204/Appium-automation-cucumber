@@ -1,4 +1,4 @@
-package org.example;
+package ExecuteTest;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
@@ -6,8 +6,9 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.net.URL;
 
-public class Main {
-    public static void main(String[] args) {
+public class RunTest {
+
+    public void openApp(){
         AppiumDriver appiumDriver;
         DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
         desiredCapabilities.setCapability("automationName","uiautomator2");
