@@ -1,0 +1,31 @@
+elements:
+  - id: option-grandparent-login
+    description: Checkbox for Grandparent
+    locators:
+      - device: API
+        value: cancercondition_bladdercancer_yes
+      - device: WEB
+        type: XPATH
+        value: //div[contains(text(),"Grandparent")]
+      - device: ANDROID
+        type: XPATH
+        value: //android.widget.TextView[contains(@text, 'Grandparent')]
+      - device: IOS
+        type: XPATH
+        value: //XCUIElementTypeOther[contains(@name,"Grandparent")]
+actions:
+  - id: select-all-family-members
+    description: Selects all members of family
+    actionElements:
+      - element: option-grandparent
+        inputType: click
+      - element: option-grandparent
+        inputType: click
+      - element: option-grandparent
+        inputType: click
+      - element: option-grandparent
+        inputType: click
+      - element: option-grandparent
+        inputType: click
+      - element: option-grandparent
+        inputType: click
