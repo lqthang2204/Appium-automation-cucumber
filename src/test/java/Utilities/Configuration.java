@@ -11,10 +11,10 @@ public class Configuration {
     public static void readConfig(){
         Configuration.AUTOMATION_NAME =  System.getProperty("automation_name")==null ? "uiautomator2" : System.getProperty("automation_name");
         Configuration.PLATFORM_NAME = System.getProperty("platform_name") == null ? "android" : System.getProperty("platform_name");
-            Configuration.UD_ID = System.getProperty("ud_id");
-        Configuration.APP_PACKAGE = System.getProperty("app_package");
-        Configuration.APP_ACTIVITY = System.getProperty("app_package");
-        Configuration.PATH_SERVER = System.getProperty("path_server");
+            Configuration.UD_ID = System.getProperty("udid");
+        Configuration.APP_PACKAGE = System.getProperty("appPackage");
+        Configuration.APP_ACTIVITY = System.getProperty("appActivity");
+        Configuration.PATH_SERVER = System.getenv("path_server");
 //        checkNull(Configuration)
     }
     public void checkNull(String value, String message){
