@@ -4,10 +4,7 @@ import ElementsPages.Element;
 import ElementsPages.Locator;
 import ElementsPages.Page;
 import Utilities.Configuration;
-import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.Selenide;
-import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.SelenideWait;
+import com.codeborne.selenide.*;
 import com.codeborne.selenide.appium.AppiumClickOptions;
 import com.codeborne.selenide.appium.SelenideAppium;
 import com.codeborne.selenide.appium.commands.AppiumClick;
@@ -19,18 +16,25 @@ import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.options.UiAutomator2Options;
 import net.bytebuddy.implementation.bytecode.Throw;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.NotFoundException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 import org.yaml.snakeyaml.representer.Representer;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,25 +42,26 @@ import java.util.Map;
 
 
 public class RunTest {
-    AppiumDriver appiumDriver;
+    WebDriver appiumDriver;
     public Map<String, Page> map = new HashMap<>();
     public Page page;
     public SelenideWait wait;
-    public void openApp(){
+    public void getDriver(){
+        try {
         DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
         desiredCapabilities.setCapability("automationName", Configuration.AUTOMATION_NAME);
         desiredCapabilities.setCapability("platformName",Configuration.PLATFORM_NAME);
         desiredCapabilities.setCapability("udid",Configuration.UD_ID);
         desiredCapabilities.setCapability("appPackage",Configuration.APP_PACKAGE);
         desiredCapabilities.setCapability("appActivity",Configuration.APP_ACTIVITY);
-        try {
             URL appiumSerPath  = new URL(Configuration.PATH_SERVER);
-            appiumDriver = new AndroidDriver(appiumSerPath, desiredCapabilities);
+           appiumDriver = new AndroidDriver(appiumSerPath, desiredCapabilities);
         }catch (Exception e){
             e.printStackTrace();
-            throw new RuntimeException("[ERR] could not create appim session");
+            throw new RuntimeException("[ERR] could not create appium session");
         }
     }
+
     public Page changePageSpec(String pageYaml, Map<String,String> mapFileYaml) throws FileNotFoundException {
         String pathFile = null;
         if(map.containsKey(pageYaml)){
@@ -120,27 +125,67 @@ public class RunTest {
         }
     }
     public void clickElement(String element){
+
         Locator locator = findLocator(element);
         By by = getBy(locator);
         wait.until(ExpectedConditions.elementToBeClickable(by));
-        appiumDriver.findElement(by).click();
-        Selenide.$(by).click();
+//        appiumDriver.findElement(by).click();
+//        Selenide.$(by).click();
+        Selenide.$(by).click(AppiumClickOptions.tap());
     }
-    public void setWait(){
-         wait = new SelenideWait(appiumDriver, Configuration.TIME_OUT, Configuration.POLLING_INTERVAL);
+    public void setWait(WebDriver driver){
+        this.appiumDriver = driver;
+         wait = new SelenideWait(driver, com.codeborne.selenide.Configuration.timeout, com.codeborne.selenide.Configuration.pollingInterval);
     }
     public void WaitToCondition(String element, String condition){
         Locator locator = findLocator(element);
         By by = getBy(locator);
         switch (condition){
             case "DISPLAYED":
-//                appiumDriver.$(by).should(Condition.exist);
-//                appiumDriver.findElement(by).
-                new Sele
+                Selenide.$(by).shouldBe(Condition.appear);
                 break;
             case "NOT_DISPLAYED":
-                Selenide.$(by).should(Condition.not(Condition.exist));
+                Selenide.$(by).shouldBe(Condition.disappear);
                 break;
+            case "EXIST":
+                Selenide.$(by).shouldBe(Condition.exist);
+                break;
+            case "NOT_EXIST":
+                Selenide.$(by).shouldBe(Condition.not(Condition.exist));
+                break;
+            case "ENABLED":
+                Selenide.$(by).shouldBe(Condition.enabled);
+                break;
+            case "NOT_ENABLED":
+                Selenide.$(by).shouldBe(Condition.disabled);
+                break;
+            case "SELECTED":
+                Selenide.$(by).shouldBe(Condition.selected);
+                break;
+            case "NOT_SELECTED":
+                Selenide.$(by).shouldBe(Condition.not(Condition.selected));
+                break;
+            case "CHECKED":
+                Selenide.$(by).shouldBe(Condition.checked);
+                break;
+            case "NOT_CHECKED":
+                Selenide.$(by).shouldBe(Condition.not(Condition.checked));
+                break;
+            case "FOCUSED":
+                Selenide.$(by).shouldBe(Condition.focused);
+                break;
+            case "NOT_FOCUSED":
+                Selenide.$(by).shouldBe(Condition.not(Condition.focused));
+                break;
+            case "HIDEN":
+                Selenide.$(by).shouldBe(Condition.hidden);
+                break;
+            case "NOT_HIDDEN":
+                Selenide.$(by).shouldBe(Condition.not(Condition.hidden));
+                break;
+            default:
+                throw new NotFoundException("Not Support Condition for wait "+ condition);
+
         }
 
     }
