@@ -35,10 +35,10 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 
 
 public class RunTest {
@@ -46,64 +46,68 @@ public class RunTest {
     public Map<String, Page> map = new HashMap<>();
     public Page page;
     public SelenideWait wait;
-    public void getDriver(){
+
+    public void getDriver() {
         try {
-        DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
-        desiredCapabilities.setCapability("automationName", Configuration.AUTOMATION_NAME);
-        desiredCapabilities.setCapability("platformName",Configuration.PLATFORM_NAME);
-        desiredCapabilities.setCapability("udid",Configuration.UD_ID);
-        desiredCapabilities.setCapability("appPackage",Configuration.APP_PACKAGE);
-        desiredCapabilities.setCapability("appActivity",Configuration.APP_ACTIVITY);
-            URL appiumSerPath  = new URL(Configuration.PATH_SERVER);
-           appiumDriver = new AndroidDriver(appiumSerPath, desiredCapabilities);
-        }catch (Exception e){
+            DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
+            desiredCapabilities.setCapability("automationName", Configuration.AUTOMATION_NAME);
+            desiredCapabilities.setCapability("platformName", Configuration.PLATFORM_NAME);
+            desiredCapabilities.setCapability("udid", Configuration.UD_ID);
+            desiredCapabilities.setCapability("appPackage", Configuration.APP_PACKAGE);
+            desiredCapabilities.setCapability("appActivity", Configuration.APP_ACTIVITY);
+            URL appiumSerPath = new URL(Configuration.PATH_SERVER);
+            appiumDriver = new AndroidDriver(appiumSerPath, desiredCapabilities);
+        } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("[ERR] could not create appium session");
         }
     }
 
-    public Page changePageSpec(String pageYaml, Map<String,String> mapFileYaml) throws FileNotFoundException {
+    public Page changePageSpec(String pageYaml, Map<String, String> mapFileYaml) throws FileNotFoundException {
         String pathFile = null;
-        if(map.containsKey(pageYaml)){
+        if (map.containsKey(pageYaml)) {
             page = map.get(pageYaml);
-        }else {
+        } else {
             try {
-                 pathFile = mapFileYaml.get(pageYaml + ".yaml");
+                pathFile = mapFileYaml.get(pageYaml + ".yaml");
                 Yaml yaml = new Yaml(new Constructor(Page.class));
                 InputStream input = new FileInputStream(pathFile);
                 page = yaml.load(input);
                 map.put(pageYaml, page);
-            }
-            catch (Exception e){
-                System.out.println("path file yaml "+ pathFile);
+            } catch (Exception e) {
+                System.out.println("path file yaml " + pathFile);
                 throw new FileNotFoundException();
             }
         }
-        return  page;
+        return page;
     }
-    public Locator findLocator(String element){
+
+    public Locator findLocator(String element) {
         Locator locator = null;
         List<Element> list = page.getElements();
-        for(int i= 0 ;i<list.size();i++){
-            if(list.get(i).getId().equals(element)){
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getId().equals(element)) {
                 List<Locator> listLocators = list.get(i).getList();
-                for(int j=0;j<listLocators.size();j++){
-                    if(listLocators.get(j).getDevice().equalsIgnoreCase(Configuration.PLATFORM_NAME)){
-                        locator =  listLocators.get(j);
+                for (int j = 0; j < listLocators.size(); j++) {
+                    if (listLocators.get(j).getDevice().equalsIgnoreCase(Configuration.PLATFORM_NAME)) {
+                        locator = listLocators.get(j);
                         break;
                     }
                 }
             }
         }
 
-        if(locator==null){
-            throw new NotFoundException("Not Found Element "+ element +" in page");
+        if (locator == null) {
+            throw new NotFoundException("Not Found Element " + element + " in page");
         }
         return locator;
     }
-    public By getBy(Locator locator){
-        String value = locator.getValue();
-        switch (locator.getType()){
+
+    public By getBy(Locator locator, String value) {
+        if(value==""){
+             value = locator.getValue();
+        }
+        switch (locator.getType()) {
             case "XPATH":
                 return By.xpath(value);
             case "ACCESSIBILITY_ID":
@@ -113,7 +117,7 @@ public class RunTest {
             case "CLASS_NAME":
                 return By.className(value);
             case "LINK_TEXT":
-                return   By.linkText(value);
+                return By.linkText(value);
             case "PARTIALLINK_TEXT":
                 return By.partialLinkText(value);
             case "ID":
@@ -121,26 +125,36 @@ public class RunTest {
             case "NAME":
                 return By.name(value);
             default:
-                throw new NotFoundException("the locator type "+ locator.getType()+ " is not supported.");
+                throw new NotFoundException("the locator type " + locator.getType() + " is not supported.");
         }
     }
-    public void clickElement(String element){
 
-        Locator locator = findLocator(element);
-        By by = getBy(locator);
+    public void clickElement(String element) {
+        List<String> list = getElementToText(element);
+        Locator locator;
+        By by;
+        if(list==null){
+             locator = findLocator(element);
+             by = getBy(locator, "");
+        }else{
+            locator = findLocator(list.get(1));
+             by = getBy(locator, list.get(0));
+        }
         wait.until(ExpectedConditions.elementToBeClickable(by));
 //        appiumDriver.findElement(by).click();
 //        Selenide.$(by).click();
         Selenide.$(by).click(AppiumClickOptions.tap());
     }
-    public void setWait(WebDriver driver){
+
+    public void setWait(WebDriver driver) {
         this.appiumDriver = driver;
-         wait = new SelenideWait(driver, com.codeborne.selenide.Configuration.timeout, com.codeborne.selenide.Configuration.pollingInterval);
+        wait = new SelenideWait(driver, com.codeborne.selenide.Configuration.timeout, com.codeborne.selenide.Configuration.pollingInterval);
     }
-    public void WaitToCondition(String element, String condition){
+
+    public void WaitToCondition(String element, String condition) {
         Locator locator = findLocator(element);
-        By by = getBy(locator);
-        switch (condition){
+        By by = getBy(locator,"");
+        switch (condition) {
             case "DISPLAYED":
                 Selenide.$(by).shouldBe(Condition.appear);
                 break;
@@ -184,9 +198,28 @@ public class RunTest {
                 Selenide.$(by).shouldBe(Condition.not(Condition.hidden));
                 break;
             default:
-                throw new NotFoundException("Not Support Condition for wait "+ condition);
+                throw new NotFoundException("Not Support Condition for wait " + condition);
 
         }
+    }
 
+    public List<String> getElementToText(String element) {
+        if (element.contains("with text")) {
+            List<String> list = new ArrayList<>();
+            String value = "";
+            String[] text = element.split("with text");
+            element = text[1].trim().replace("\"", "");
+            Locator locator = findLocator(text[0].trim());
+            value = locator.getValue();
+            if (value.contains("{text}")) {
+//                if(map.containsKey(element)){
+//                    element = map.get(element);
+//                }
+                list.add(value.replace("{text}", element));
+                list.add(text[0].trim());
+                return list;
+            }
+        }
+        return null;
     }
 }
