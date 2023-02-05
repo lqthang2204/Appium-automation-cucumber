@@ -13,7 +13,7 @@ elements:
       - device: IOS
         type: XPATH
         value: //XCUIElementTypeOther[contains(@name,"Grandparent")]
-  - id: option-viet-nam
+  - id: option-vietnam
     description: Checkbox for Grandparent
     locators:
       - device: API

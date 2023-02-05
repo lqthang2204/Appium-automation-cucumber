@@ -21,16 +21,25 @@ public class Steps {
         test = new RunTest();
         this.mapFileYaml=  pageUtil.findFileToName(new File(System.getProperty("user.dir") + "/src/test/resources/pages"),this.mapFileYaml);
 
+
     }
 
     @Given("I open application")
     public void i_open_application() {
         test.openApp();
+        test.setWait();
     }
     @Given("I change the page spec to {word}")
     public void changePage(String page) throws FileNotFoundException {
         test.changePageSpec(page, this.mapFileYaml);
     }
-
+    @Given("I click element {word}")
+    public void clickElement(String element) {
+        test.clickElement(element);
+    }
+    @Given("I wait for element {word} to be {}")
+    public void i_wait_for_element_fitbit_title_to_be_displayed(String element, String condition) {
+        test.WaitToCondition(element, condition);
+    }
 }
 
