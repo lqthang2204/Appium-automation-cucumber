@@ -9,6 +9,7 @@ import com.codeborne.selenide.appium.AppiumClickOptions;
 import com.codeborne.selenide.appium.SelenideAppium;
 import com.codeborne.selenide.appium.commands.AppiumClick;
 import com.codeborne.selenide.commands.ShouldBe;
+import com.codeborne.selenide.selector.ByText;
 import io.appium.java_client.AppiumBy;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileBy;
@@ -130,17 +131,8 @@ public class RunTest {
     }
 
     public void clickElement(String element) {
-        List<String> list = getElementToText(element);
-        Locator locator;
-        By by;
-        if(list==null){
-             locator = findLocator(element);
-             by = getBy(locator, "");
-        }else{
-            locator = findLocator(list.get(1));
-             by = getBy(locator, list.get(0));
-        }
-        wait.until(ExpectedConditions.elementToBeClickable(by));
+         By by = getBytoElement(element);
+//        wait.until(ExpectedConditions.elementToBeClickable(by));
 //        appiumDriver.findElement(by).click();
 //        Selenide.$(by).click();
         Selenide.$(by).click(AppiumClickOptions.tap());
@@ -221,5 +213,53 @@ public class RunTest {
             }
         }
         return null;
+    }
+    public void TypeValueToElement(String value,String element){
+        Locator locator = findLocator(element);
+        By by = getBy(locator,"");
+        Selenide.$(by).setValue(value);
+    }
+    public void ExecuteWithText(String condition, String text){
+        SelenideElement element = Selenide.$(new ByText(text));
+        switch (condition){
+            case "click":
+                element.click();
+                break;
+            case "clear":
+                element.clear();
+                break;
+            case "DISPLAYED":
+                element.shouldBe(Condition.appear);
+                break;
+            case "NOT_DISPLAYED":
+                element.shouldBe(Condition.disappear);
+                break;
+            case "EXIST":
+                element.shouldBe(Condition.exist);
+                break;
+            case "NOT_EXIST":
+                element.shouldBe(Condition.not(Condition.exist));
+                break;
+            case "ENABLED":
+                element.shouldBe(Condition.enabled);
+                break;
+            default:
+                throw new NotFoundException("Not found action "+ condition +" with text" + text);
+
+        }
+        Selenide.$(new ByText(text)).click();
+    }
+    public By getBytoElement(String element){
+        List<String> list = getElementToText(element);
+        Locator locator;
+        By by;
+        if(list==null){
+            locator = findLocator(element);
+            by = getBy(locator, "");
+        }else{
+            locator = findLocator(list.get(1));
+            by = getBy(locator, list.get(0));
+        }
+        return by;
     }
 }
