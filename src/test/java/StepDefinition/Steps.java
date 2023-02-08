@@ -58,10 +58,18 @@ public class Steps {
     public void i_wait_for_element_fitbit_title_to_be_displayed(String element, String condition) {
         test.WaitToCondition(element, condition);
     }
+    @Given("I type {string} into element {word}")
+    public void TypeToElement(String value, String element) {
+        test.TypeValueToElement(value, element);
+    }
+    @Given("I {word} into element have text {}")
+    public void ConditionHaveText(String condition, String text) {
+        test.ExecuteWithText(condition,text);
+    }
     @After
     public void CloseApp(){
-        System.out.println("close webdriver.................");
-        WebDriverRunner.closeWebDriver();
+//        System.out.println("close webdriver.................");
+//        WebDriverRunner.closeWebDriver();
     }
 }
 
