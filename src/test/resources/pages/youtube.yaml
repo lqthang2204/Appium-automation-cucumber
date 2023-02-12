@@ -1,0 +1,59 @@
+elements:
+  - id: search-icon
+    description: Checkbox for Grandparent
+    locators:
+      - device: API
+        value: cancercondition_bladdercancer_yes
+      - device: WEB
+        type: XPATH
+        value: //div[contains(text(),"Grandparent")]
+      - device: ANDROID
+        type: XPATH
+        value: //android.widget.ImageView[@content-desc="Tìm kiếm"]
+      - device: IOS
+        type: XPATH
+        value: //XCUIElementTypeOther[contains(@name,"Grandparent")]
+  - id: search-field
+    description: Checkbox for Grandparent
+    locators:
+      - device: API
+        value: cancercondition_bladdercancer_yes
+      - device: WEB
+        type: XPATH
+        value: //div[contains(text(),"Grandparent")]
+      - device: ANDROID
+        type: ID
+        value: com.google.android.youtube:id/search_edit_text
+      - device: IOS
+        type: XPATH
+        value: //XCUIElementTypeOther[contains(@name,"Grandparent")]
+  - id: equal-button
+    description: Checkbox for Grandparent
+    locators:
+      - device: API
+        value: cancercondition_bladdercancer_yes
+      - device: WEB
+        type: XPATH
+        value: //div[contains(text(),"Grandparent")]
+      - device: ANDROID
+        type: ID
+        value: com.google.android.calculator:id/eq
+      - device: IOS
+        type: XPATH
+        value: //XCUIElementTypeOther[contains(@name,"Grandparent")]
+actions:
+  - id: select-all-family-members
+    description: Selects all members of family
+    actionElements:
+      - element: option-grandparent
+        inputType: click
+      - element: option-grandparent
+        inputType: click
+      - element: option-grandparent
+        inputType: click
+      - element: option-grandparent
+        inputType: click
+      - element: option-grandparent
+        inputType: click
+      - element: option-grandparent
+        inputType: click
