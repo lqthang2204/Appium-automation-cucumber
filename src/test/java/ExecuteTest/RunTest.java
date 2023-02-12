@@ -48,22 +48,6 @@ public class RunTest {
     public Page page;
     public SelenideWait wait;
 
-    public void getDriver() {
-        try {
-            DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
-            desiredCapabilities.setCapability("automationName", Configuration.AUTOMATION_NAME);
-            desiredCapabilities.setCapability("platformName", Configuration.PLATFORM_NAME);
-            desiredCapabilities.setCapability("udid", Configuration.UD_ID);
-            desiredCapabilities.setCapability("appPackage", Configuration.APP_PACKAGE);
-            desiredCapabilities.setCapability("appActivity", Configuration.APP_ACTIVITY);
-            URL appiumSerPath = new URL(Configuration.PATH_SERVER);
-            appiumDriver = new AndroidDriver(appiumSerPath, desiredCapabilities);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("[ERR] could not create appium session");
-        }
-    }
-
     public Page changePageSpec(String pageYaml, Map<String, String> mapFileYaml) throws FileNotFoundException {
         String pathFile = null;
         if (map.containsKey(pageYaml)) {
@@ -75,10 +59,14 @@ public class RunTest {
                 InputStream input = new FileInputStream(pathFile);
                 page = yaml.load(input);
                 map.put(pageYaml, page);
-            } catch (Exception e) {
+            } catch (FileNotFoundException e) {
                 System.out.println("path file yaml " + pathFile);
-                throw new FileNotFoundException();
+                throw new FileNotFoundException(e.getMessage());
             }
+            catch (Exception ex){
+                throw  new RuntimeException(ex.getMessage());
+            }
+
         }
         return page;
     }
@@ -132,23 +120,18 @@ public class RunTest {
 
     public void clickElement(String element) {
          By by = getBytoElement(element);
-//        wait.until(ExpectedConditions.elementToBeClickable(by));
-//        appiumDriver.findElement(by).click();
-//        Selenide.$(by).click();
-        Selenide.$(by).click(AppiumClickOptions.tap());
+        Selenide.$(by).shouldBe(Condition.visible).click(AppiumClickOptions.tap());
     }
-
     public void setWait(WebDriver driver) {
         this.appiumDriver = driver;
         wait = new SelenideWait(driver, com.codeborne.selenide.Configuration.timeout, com.codeborne.selenide.Configuration.pollingInterval);
     }
-
     public void WaitToCondition(String element, String condition) {
         Locator locator = findLocator(element);
         By by = getBy(locator,"");
         switch (condition) {
             case "DISPLAYED":
-                Selenide.$(by).shouldBe(Condition.appear);
+            Selenide.$(by).shouldBe(Condition.appear);
                 break;
             case "NOT_DISPLAYED":
                 Selenide.$(by).shouldBe(Condition.disappear);
@@ -169,29 +152,28 @@ public class RunTest {
                 Selenide.$(by).shouldBe(Condition.selected);
                 break;
             case "NOT_SELECTED":
-                Selenide.$(by).shouldBe(Condition.not(Condition.selected));
+                Selenide.$(by).shouldNot((Condition.selected));
                 break;
             case "CHECKED":
                 Selenide.$(by).shouldBe(Condition.checked);
                 break;
             case "NOT_CHECKED":
-                Selenide.$(by).shouldBe(Condition.not(Condition.checked));
+                Selenide.$(by).shouldNot((Condition.checked));
                 break;
             case "FOCUSED":
                 Selenide.$(by).shouldBe(Condition.focused);
                 break;
             case "NOT_FOCUSED":
-                Selenide.$(by).shouldBe(Condition.not(Condition.focused));
+                Selenide.$(by).shouldNot((Condition.focused));
                 break;
             case "HIDEN":
                 Selenide.$(by).shouldBe(Condition.hidden);
                 break;
             case "NOT_HIDDEN":
-                Selenide.$(by).shouldBe(Condition.not(Condition.hidden));
+                Selenide.$(by).shouldNot((Condition.hidden));
                 break;
             default:
                 throw new NotFoundException("Not Support Condition for wait " + condition);
-
         }
     }
 
@@ -217,7 +199,7 @@ public class RunTest {
     public void TypeValueToElement(String value,String element){
         Locator locator = findLocator(element);
         By by = getBy(locator,"");
-        Selenide.$(by).setValue(value);
+        Selenide.$(by).shouldBe(Condition.visible).setValue(value);
     }
     public void ExecuteWithText(String condition, String text){
         SelenideElement element = Selenide.$(new ByText(text));

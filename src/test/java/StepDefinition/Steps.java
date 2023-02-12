@@ -5,6 +5,7 @@ import ManageDriver.AndroidDriverProvider;
 import Utilities.Configuration;
 import Utilities.PageUtil;
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.appium.SelenideAppium;
@@ -12,6 +13,7 @@ import io.appium.java_client.AppiumDriver;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
@@ -21,6 +23,8 @@ import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.codeborne.selenide.appium.SelenideAppium.launchApp;
 
 public class Steps {
     public RunTest test;
@@ -36,8 +40,6 @@ public class Steps {
         Configuration.readConfig();
         test = new RunTest();
         this.mapFileYaml=  pageUtil.findFileToName(new File(System.getProperty("user.dir") + "/src/test/resources/pages"),this.mapFileYaml);
-
-
     }
 
     @Given("I open application")
@@ -68,8 +70,8 @@ public class Steps {
     }
     @After
     public void CloseApp(){
-//        System.out.println("close webdriver.................");
-//        WebDriverRunner.closeWebDriver();
+        System.out.println("close webdriver.................");
+        WebDriverRunner.closeWebDriver();
     }
 }
 

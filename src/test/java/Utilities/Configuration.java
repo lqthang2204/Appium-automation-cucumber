@@ -15,7 +15,7 @@ public class Configuration {
             Configuration.UD_ID = System.getProperty("udid");
         Configuration.APP_PACKAGE = System.getProperty("appPackage");
         Configuration.APP_ACTIVITY = System.getProperty("appActivity");
-        Configuration.PATH_SERVER = System.getenv("PATH_SERVER");
+        Configuration.PATH_SERVER = System.getenv("PATH_SERVER")==null ? "http://localhost:4723/wd/hub" : System.getenv("PATH_SERVER");
 //        checkNull(Configuration)
     }
     public void checkNull(String value, String message){
