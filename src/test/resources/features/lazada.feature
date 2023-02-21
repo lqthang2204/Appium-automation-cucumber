@@ -7,7 +7,7 @@ Feature: Login function
     And I change the page spec to LoginPage
     And I click element option-language with text "Vietnam"
     And I change the page spec to HomePage
-    And I wait for element confirm-option to be NOT_ENABLED
+    And I wait for element confirm-option to be ENABLED
     And I click element confirm-option
     And I change the page spec to IndexPage
     And I wait for element search-field to be DISPLAYED
