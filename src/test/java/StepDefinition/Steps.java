@@ -5,10 +5,16 @@ import ManageDriver.AndroidDriverProvider;
 import Utilities.Configuration;
 import Utilities.PageUtil;
 import com.codeborne.selenide.WebDriverRunner;
+import io.appium.java_client.AppiumDriver;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
+import io.cucumber.java.BeforeAll;
+import io.cucumber.java.BeforeStep;
 import io.cucumber.java.en.Given;
 import org.openqa.selenium.WebDriver;
+import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Parameters;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -17,25 +23,29 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Steps {
-    public RunScripts test;
+    public RunScripts test  = new RunScripts();;
     public Map<String, String> mapFileYaml = new HashMap<>();
     public PageUtil pageUtil =new PageUtil();
-    WebDriver driver;
-    public void openApp() throws MalformedURLException {
-         driver  = AndroidDriverProvider.getAndroidDriver();
-         WebDriverRunner.setWebDriver(driver);
+    AndroidDriverProvider provider = new AndroidDriverProvider();
+//    WebDriver driver;
+    public ThreadLocal<AppiumDriver> driver = new ThreadLocal<AppiumDriver>();
+
+    public void setDriver(AppiumDriver driver){
+            this.driver.set(driver);
     }
-    @Before
-    public void start(){
-        Configuration.readConfig();
-        test = new RunScripts();
+    public  AppiumDriver getDriver(){
+        return this.driver.get();
+    }
+    public void openApp() throws MalformedURLException {
+         setDriver(provider.getAndroidDriver());
+         WebDriverRunner.setWebDriver(getDriver());
         this.mapFileYaml=  pageUtil.findFileToName(new File(System.getProperty("user.dir") + "/src/test/resources/pages"),this.mapFileYaml);
     }
 
     @Given("I open application")
     public void i_open_application() throws MalformedURLException {
         openApp();
-        test.setWait(driver);
+        test.setWait(getDriver());
     }
     @Given("I change the page spec to {word}")
     public void changePage(String page) throws FileNotFoundException {
@@ -62,6 +72,7 @@ public class Steps {
     public void CloseApp(){
         System.out.println("close webdriver.................");
         WebDriverRunner.closeWebDriver();
+
     }
 }
 

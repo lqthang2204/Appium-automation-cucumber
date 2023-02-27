@@ -1,4 +1,4 @@
-@feature-mc-219467
+@feature-mc-219467 @calculator
 Feature: test app calculator
 
   @mc-calculator

@@ -9,7 +9,8 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import java.net.URL;
 
 public class AndroidDriverProvider {
-    public static WebDriver getAndroidDriver(){
+
+    public AppiumDriver getAndroidDriver(){
         try {
             DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
             desiredCapabilities.setCapability("automationName", Configuration.AUTOMATION_NAME);
@@ -18,10 +19,11 @@ public class AndroidDriverProvider {
             desiredCapabilities.setCapability("appPackage",Configuration.APP_PACKAGE);
             desiredCapabilities.setCapability("appActivity",Configuration.APP_ACTIVITY);
             URL appiumSerPath  = new URL(Configuration.PATH_SERVER);
+            System.out.println("Configuration.PATH_SERVER=============================="+ Configuration.PATH_SERVER);
             return new AndroidDriver(appiumSerPath, desiredCapabilities);
         }catch (Exception e){
-            e.printStackTrace();
-            throw new RuntimeException("[ERR] could not create appium session");
+                e.printStackTrace();
+                throw new RuntimeException("[ERR] could not create appium session");
         }
     }
 }
