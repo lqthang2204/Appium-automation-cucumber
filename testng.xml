@@ -15,18 +15,18 @@
 <!--            <class name="RunnerTest"></class>-->
 <!--        </classes>-->
 <!--    </test>-->
-<!--    <test name="Google Pixel 2-Clone">-->
-<!--        <parameter name="udid" value="emulator-5554"></parameter>-->
-<!--        <classes>-->
-<!--            <class name="RunnerTest"></class>-->
-<!--        </classes>-->
-<!--    </test>-->
-<!--    <test name="Google Pixel 2">-->
-<!--        <parameter name="udid" value="emulator-5556"></parameter>-->
-<!--        <classes>-->
-<!--            <class name="RunnerTest"></class>-->
-<!--        </classes>-->
-<!--    </test>-->
+    <test name="Google Pixel 2-Clone">
+        <parameter name="udid" value="emulator-5554"></parameter>
+        <classes>
+            <class name="RunnerTest"></class>
+        </classes>
+    </test>
+    <test name="Google Pixel 2">
+        <parameter name="udid" value="emulator-5556"></parameter>
+        <classes>
+            <class name="RunnerTest"></class>
+        </classes>
+    </test>
     <test name="Lenovo TB">
         <parameter name="udid" value="HVA222NA"></parameter>
         <classes>

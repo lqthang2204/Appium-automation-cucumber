@@ -10,7 +10,7 @@ import org.testng.annotations.*;
 
 
 @RunWith(Cucumber.class)
-@CucumberOptions(features = "src/test/resources/features", glue = {"StepDefinition"}, tags = "")
+@CucumberOptions(features = "src/test/resources/features", glue = {"StepDefinition"}, tags = "", plugin = {"json:target/cucumber.json", "pretty"})
 
 
 public class RunnerTest extends AbstractTestNGCucumberTests {
