@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="All Test Suite">
+<!--    <suite name="All Test Suite" parallel="tests" thread-count="3">-->
     <parameter name="automation_name" value="uiautomator2"></parameter>
     <parameter name="platform_name" value="android"></parameter>
     <parameter name="appPackage" value="com.lazada.android"></parameter>
@@ -14,16 +15,14 @@
 <!--            <class name="RunnerTest"></class>-->
 <!--        </classes>-->
 <!--    </test>-->
-    <test name="Google Pixel 2">
-        <parameter name="udid" value="emulator-5554"></parameter>
-
-        <classes>
-            <class name="RunnerTest"></class>
-        </classes>
-    </test>
 <!--    <test name="Google Pixel 2-Clone">-->
+<!--        <parameter name="udid" value="emulator-5554"></parameter>-->
+<!--        <classes>-->
+<!--            <class name="RunnerTest"></class>-->
+<!--        </classes>-->
+<!--    </test>-->
+<!--    <test name="Google Pixel 2">-->
 <!--        <parameter name="udid" value="emulator-5556"></parameter>-->
-
 <!--        <classes>-->
 <!--            <class name="RunnerTest"></class>-->
 <!--        </classes>-->
@@ -34,11 +33,4 @@
             <class name="RunnerTest"></class>
         </classes>
     </test>
-<!--    <test name="Google Pixel 2">-->
-<!--        <parameter name="udid" value="emulator-5556"></parameter>-->
-<!--        <classes>-->
-<!--            <class name="RunnerTest"></class>-->
-<!--        </classes>-->
-<!--    </test>-->
-
 </suite>

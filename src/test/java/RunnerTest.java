@@ -27,7 +27,6 @@ public class RunnerTest extends AbstractTestNGCucumberTests {
             Configuration.PATH_SERVER = "http://127.0.0.1:"+port_number+"/wd/hub";
             com.codeborne.selenide.Configuration.timeout = timeout;
             com.codeborne.selenide.Configuration.pollingInterval = pollingInterval;
-
         }else{
             Configuration.AUTOMATION_NAME =  System.getProperty("automation_name");
             Configuration.PLATFORM_NAME = System.getProperty("platform_name");
