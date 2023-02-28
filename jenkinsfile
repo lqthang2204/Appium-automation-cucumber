@@ -16,7 +16,7 @@ pipeline {
               stage ('=============== Starting appium server ===================='){
                  steps{
                    echo 'running ...'
-                              bat label: '', script: 'appium'
+                              bat label: '', script: 'appium &'
                  }
          }
          stage ('Running FrameworkAuto'){
