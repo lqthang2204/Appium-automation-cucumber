@@ -1,0 +1,39 @@
+pipeline {
+    agent any
+
+    tools {
+        // Install the Maven version configured as "M3" and add it to the path.
+        maven "mvn"
+    }
+
+    stages {
+        stage('get Code to GitHub') {
+            steps {
+                // Get some code from a GitHub repository
+                git 'https://github.com/lqthang2204/Appium.git'
+            }
+
+
+//             post {
+//                 // If Maven was able to run the tests, even if some of the test
+//                 // failed, record the test results and archive the jar file.
+//                 success {
+//
+// //                     publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'target/cucumber-report-html/cucumber-html-reports', reportFiles: 'overview-features.html', reportName: 'HTML Report', reportTitles: '', useWrapperFileDirectly: true])
+//                         cucumber buildStatus: 'UNSTABLE', customCssFiles: '', customJsFiles: '', fileIncludePattern: '**/cucumber.json'
+//                 }
+//             }
+        }
+         stage ('Running FrameworkAuto'){
+         steps{
+           bat "mvn clean verify -Dautomation_name=uiautomator2 -Dplatform_name=android -Dudid=HVA222NA -Dport_number=4723 -DappPackage='com.google.android.youtube' -DappActivity='com.google.android.apps.youtube.app.WatchWhileActivity' '-Dselenide.timeout=20000' '-Dselenide.pollingInterval=100' '-Dcucumber.filter.tags=@mc-test-lazada'"
+         }
+ }
+        stage ('Generated report HTML'){
+        steps{
+         cucumber buildStatus: 'UNSTABLE', customCssFiles: '', customJsFiles: '', fileIncludePattern: '**/cucumber.json'
+        }
+        }
+    }
+
+}
