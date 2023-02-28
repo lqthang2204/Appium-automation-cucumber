@@ -12,22 +12,11 @@ pipeline {
                 // Get some code from a GitHub repository
                 git 'https://github.com/lqthang2204/Appium.git'
             }
-
-
-//             post {
-//                 // If Maven was able to run the tests, even if some of the test
-//                 // failed, record the test results and archive the jar file.
-//                 success {
-//
-// //                     publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'target/cucumber-report-html/cucumber-html-reports', reportFiles: 'overview-features.html', reportName: 'HTML Report', reportTitles: '', useWrapperFileDirectly: true])
-//                         cucumber buildStatus: 'UNSTABLE', customCssFiles: '', customJsFiles: '', fileIncludePattern: '**/cucumber.json'
-//                 }
-//             }
         }
               stage ('=============== Starting appium server ===================='){
                  steps{
                    echo 'running ...'
-                              bat label: '', script: 'node C:/Users/admin/AppData/Roaming/npm/node_modules/appium/build/lib/main.js'
+                              bat label: '', script: 'appium'
                  }
          }
          stage ('Running FrameworkAuto'){
@@ -42,5 +31,11 @@ pipeline {
         }
         }
     }
+                  stage ('=============== Closing appium server ===================='){
+                     steps{
+                       echo 'running ...'
+                                  bat label: '', script: 'kill \$(lsof -t -i :4723)'
+                     }
+             }
 
 }
