@@ -30,12 +30,12 @@ pipeline {
          cucumber buildStatus: 'UNSTABLE', customCssFiles: '', customJsFiles: '', fileIncludePattern: '**/cucumber.json'
         }
         }
+            stage ('=============== Closing appium server ===================='){
+                         steps{
+                           echo 'running ...'
+                                      bat label: '', script: 'kill \$(lsof -t -i :4723)'
+                         }
+                 }
     }
-                  stage ('=============== Closing appium server ===================='){
-                     steps{
-                       echo 'running ...'
-                                  bat label: '', script: 'kill \$(lsof -t -i :4723)'
-                     }
-             }
 
 }
