@@ -26,7 +26,7 @@ pipeline {
         }
          stage ('Running FrameworkAuto'){
          steps{
-           bat "mvn clean verify -Dautomation_name=uiautomator2 -Dplatform_name=android -Dudid=HVA222NA -Dport_number=4723 -DappPackage='com.google.android.youtube' -DappActivity='com.google.android.apps.youtube.app.WatchWhileActivity' '-Dselenide.timeout=20000' '-Dselenide.pollingInterval=100' '-Dcucumber.filter.tags=@mc-test-lazada'"
+           bat "mvn clean verify -Dautomation_name=uiautomator2 -Dplatform_name=android -Dudid=HVA222NA -Dport_number=4723 -DappPackage='com.google.android.youtube' -DappActivity='com.google.android.apps.youtube.app.WatchWhileActivity' -Dselenide.timeout=20000 -Dselenide.pollingInterval=100 -Dcucumber.filter.tags=@mc-test-lazada"
          }
  }
         stage ('Generated report HTML'){
