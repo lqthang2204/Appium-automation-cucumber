@@ -27,7 +27,7 @@ pipeline {
               stage ('=============== Starting appium server ===================='){
                  steps{
                    echo 'running ...'
-                              bat label: '', script: 'node C:\Users\User\AppData\Roaming\npm\node_modules\appium\build\lib\main.js --address 0.0.0.0 --port 4723 --no-reset &'
+                              bat label: '', script: 'node C:\Users\admin\AppData\Roaming\npm\node_modules\appium\build\lib\main.js'
                  }
          }
          stage ('Running FrameworkAuto'){
