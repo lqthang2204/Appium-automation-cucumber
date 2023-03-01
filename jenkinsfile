@@ -16,7 +16,7 @@ pipeline {
               stage ('=============== Starting appium server ===================='){
                  steps{
                    echo 'running ...'
-                              bat label: '', script: 'node C:/Users/admin/AppData/Roaming/npm/node_modules/appium/build/lib/main.js'
+                              sh "appium"
                  }
          }
          stage ('Running FrameworkAuto'){
