@@ -8,12 +8,16 @@ import com.codeborne.selenide.*;
 import com.codeborne.selenide.appium.AppiumClickOptions;
 import com.codeborne.selenide.selector.ByText;
 import io.appium.java_client.AppiumBy;
+import io.appium.java_client.PerformsTouchActions;
+import io.appium.java_client.TouchAction;
+import io.cucumber.java.eo.Se;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NotFoundException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.interactions.Action;
+import org.openqa.selenium.interactions.Actions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -101,15 +105,21 @@ public class RunScripts {
 
     public void clickElement(String element) {
          By by = getBytoElement(element);
-        Selenide.$(by).shouldBe(Condition.visible).click(AppiumClickOptions.tap());
+         Selenide.$(by).shouldBe(Condition.enabled).click(AppiumClickOptions.tap());
+    }
+    public void scrollToElement(String element){
+        By by = getBytoElement(element);
+        Actions action = new Actions(this.appiumDriver);
+        action.scrollToElement(Selenide.$(by));
     }
     public void setWait(WebDriver driver) {
         this.appiumDriver = driver;
         wait = new SelenideWait(driver, com.codeborne.selenide.Configuration.timeout, com.codeborne.selenide.Configuration.pollingInterval);
     }
     public void WaitToCondition(String element, String condition) {
-        Locator locator = findLocator(element);
-        By by = getBy(locator,"");
+        By by = getBytoElement(element);
+//        Locator locator = findLocator(element);
+//        By by = getBy(locator,"");
         switch (condition) {
             case "DISPLAYED":
             Selenide.$(by).shouldBe(Condition.appear);
@@ -178,8 +188,9 @@ public class RunScripts {
         return null;
     }
     public void TypeValueToElement(String value,String element){
-        Locator locator = findLocator(element);
-        By by = getBy(locator,"");
+        By by = getBytoElement(element);
+//        Locator locator = findLocator(element);
+//        By by = getBy(locator,"");
         Selenide.$(by).shouldBe(Condition.visible).setValue(value);
     }
     public void ExecuteWithText(String condition, String text){

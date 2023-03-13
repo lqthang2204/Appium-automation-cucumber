@@ -1,0 +1,29 @@
+elements:
+  - id: user-icon
+    description: User icon on UI
+    locators:
+      - device: API
+        value: cancercondition_bladdercancer_yes
+      - device: WEB
+        type: XPATH
+        value: //div[contains(text(),"Grandparent")]
+      - device: ANDROID
+        type: XPATH
+        value: //android.widget.TextView[contains(@text, "{text}")]
+      - device: IOS
+        type: XPATH
+        value: //XCUIElementTypeOther[contains(@name,"Grandparent")]
+  - id: text-ui
+    description: text on UI
+    locators:
+      - device: API
+        value: cancercondition_bladdercancer_yes
+      - device: WEB
+        type: XPATH
+        value: //div[contains(text(),"Grandparent")]
+      - device: ANDROID
+        type: XPATH
+        value: //android.widget.TextView[contains(@text, "{text}")]
+      - device: IOS
+        type: XPATH
+        value: //XCUIElementTypeOther[contains(@name,"Grandparent")]
