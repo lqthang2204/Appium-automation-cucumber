@@ -11,6 +11,7 @@ import io.cucumber.java.Before;
 import io.cucumber.java.BeforeAll;
 import io.cucumber.java.BeforeStep;
 import io.cucumber.java.en.Given;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.BeforeTest;
@@ -56,7 +57,7 @@ public class Steps {
         test.clickElement(element);
     }
 
-    @Given("I wait for element {word} to be {}")
+    @Given("I wait for element {} to be {}")
     public void i_wait_for_element_fitbit_title_to_be_displayed(String element, String condition) {
         test.WaitToCondition(element, condition);
     }
@@ -67,6 +68,11 @@ public class Steps {
     @Given("I {word} into element have text {}")
     public void ConditionHaveText(String condition, String text) {
         test.ExecuteWithText(condition,text);
+    }
+
+    @Given("I scroll to element {}")
+    public void i_scroll_to_element_option_language_with_text(String element) {
+      test.scrollToElement(element);
     }
     @After
     public void CloseApp(){
