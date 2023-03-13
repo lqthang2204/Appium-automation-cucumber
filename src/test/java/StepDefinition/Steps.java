@@ -61,7 +61,7 @@ public class Steps {
     public void i_wait_for_element_fitbit_title_to_be_displayed(String element, String condition) {
         test.WaitToCondition(element, condition);
     }
-    @Given("I type {string} into element {word}")
+    @Given("I type {string} into element {}")
     public void TypeToElement(String value, String element) {
         test.TypeValueToElement(value, element);
     }
