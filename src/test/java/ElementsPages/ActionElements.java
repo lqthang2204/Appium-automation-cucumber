@@ -1,27 +1,30 @@
 package ElementsPages;
 
 public class ActionElements {
-	public String element;
+	public Element element;
 	public String condition;
-	public int timeout;
+	public long timeout;
 	public String inputType;
 	public String infoType;
-	public String getElement() {
+
+	public Element getElement() {
 		return element;
 	}
-	public void setElement(String element) {
+
+	public void setElement(Element element) {
 		this.element = element;
 	}
+
 	public String getCondition() {
 		return condition;
 	}
 	public void setCondition(String condition) {
 		this.condition = condition;
 	}
-	public int getTimeout() {
+	public long getTimeout() {
 		return timeout;
 	}
-	public void setTimeout(int timeout) {
+	public void setTimeout(long timeout) {
 		this.timeout = timeout;
 	}
 	public String getInputType() {

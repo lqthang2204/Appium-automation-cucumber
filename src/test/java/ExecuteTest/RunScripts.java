@@ -1,26 +1,30 @@
 package ExecuteTest;
 
-import ElementsPages.Element;
-import ElementsPages.Locator;
-import ElementsPages.Page;
+import ElementsPages.*;
 import Utilities.Configuration;
 import com.codeborne.selenide.*;
 import com.codeborne.selenide.appium.AppiumClickOptions;
 import com.codeborne.selenide.selector.ByText;
 import io.appium.java_client.AppiumBy;
+import io.appium.java_client.AppiumFluentWait;
 import io.appium.java_client.PerformsTouchActions;
 import io.appium.java_client.TouchAction;
+import io.appium.java_client.functions.ExpectedCondition;
 import io.cucumber.java.eo.Se;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.NotFoundException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.*;
+import org.testng.Assert;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -107,6 +111,84 @@ public class RunScripts {
          By by = getBytoElement(element);
          Selenide.$(by).shouldBe(Condition.enabled).click(AppiumClickOptions.tap());
     }
+    public void getAction(String action) throws InterruptedException {
+        boolean flag = false;
+        try {
+            List<Action> listActions = page.getActions();
+            By by = null;
+            long timeout;
+            Wait wait = null;
+            for(int i=0;i<listActions.size();i++){
+                if(listActions.get(i).getId().equals(action)){
+                    List<ActionElements> listActionElements = listActions.get(i).getActionElements();
+                    for(int j=0;j<listActionElements.size();j++){
+                        if(listActionElements.get(j).getCondition()!=null){
+                            if(listActionElements.get(j).getTimeout()  !=0){
+                                flag = true;
+                            }
+                            timeout = listActionElements.get(j).getTimeout()  ==0 ? com.codeborne.selenide.Configuration.timeout : listActionElements.get(j).getTimeout();
+                            List<Locator> listLocator = listActionElements.get(j).getElement().getList();
+                            for(int k=0;k<listLocator.size();k++){
+                                if(listLocator.get(k).getDevice().equalsIgnoreCase(Configuration.PLATFORM_NAME)){
+                                    by = getBy(listLocator.get(k), "");
+                                    break;
+
+                                }
+                            }
+                            wait= new FluentWait(appiumDriver).withTimeout(Duration.ofMillis(timeout));
+                            switch (listActionElements.get(j).getCondition()){
+                                case  "DISPLAYED":
+                                    wait.until(ExpectedConditions.visibilityOf(Selenide.$(by)));
+                                    break;
+                                case "NOT_DISPLAYED":
+                                    wait.until(ExpectedConditions.invisibilityOf(Selenide.$(by)));
+                                    break;
+                                case "ENABLED":
+                                    wait.until(ExpectedConditions.elementToBeClickable(Selenide.$(by)));
+                                    break;
+                                case "NOT_ENABLED":
+                                    wait.until(ExpectedConditions.not(ExpectedConditions.elementToBeClickable(Selenide.$(by))));
+                                    break;
+                            }
+                            if(listActionElements.get(j).inputType!=""){
+                                runType(by, listActionElements.get(j).inputType,"");
+                            }
+
+                        }
+                        else{
+                            runType(by, listActionElements.get(j).inputType,"");
+                        }
+
+                    }
+
+                }
+
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            Assert.assertTrue(flag);
+        }
+
+
+    }
+    public void runType(By by, String status,String value){
+        Actions action = new Actions(this.appiumDriver);
+        action.scrollToElement(Selenide.$(by));
+        switch (status){
+            case "text":
+                Selenide.$(by).setValue(value);
+                break;
+            case "click":
+                Selenide.$(by).click();
+                break;
+            default:
+                throw new RuntimeException();
+
+
+        }
+    }
+
+
     public void scrollToElement(String element){
         By by = getBytoElement(element);
         Actions action = new Actions(this.appiumDriver);

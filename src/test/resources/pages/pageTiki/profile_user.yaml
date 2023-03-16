@@ -1,0 +1,29 @@
+elements:
+  - id: quan-ly-don-hang
+    description: User icon on UI
+    locators:
+      - device: API
+        value: cancercondition_bladdercancer_yes
+      - device: WEB
+        type: XPATH
+        value: //div[contains(text(),"Grandparent")]
+      - device: ANDROID
+        type: XPATH
+        value: (//*[@resource-id="vn.tiki.app.tikiandroid:id/text_text_view"])[1]
+      - device: IOS
+        type: XPATH
+        value: //XCUIElementTypeOther[contains(@name,"Grandparent")]
+  - id: phone-number-field
+    description: User icon on UI
+    locators:
+      - device: API
+        value: cancercondition_bladdercancer_yes
+      - device: WEB
+        type: XPATH
+        value: //div[contains(text(),"Grandparent")]
+      - device: ANDROID
+        type: XPATH
+        value: //*[@class="android.widget.EditText"]
+      - device: IOS
+        type: XPATH
+        value: //XCUIElementTypeOther[contains(@name,"Grandparent")]

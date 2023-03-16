@@ -27,3 +27,26 @@ elements:
       - device: IOS
         type: XPATH
         value: //XCUIElementTypeOther[contains(@name,"Grandparent")]
+  - &popup-voucher
+    id: popup-voucher
+    description: Pop up voucher
+    locators:
+      - device: API
+        value: cancercondition_bladdercancer_yes
+      - device: WEB
+        type: XPATH
+        value: //div[contains(text(),"Grandparent")]
+      - device: ANDROID
+        type: XPATH
+        value: (//*[@class='android.widget.ImageView'])[43]
+      - device: IOS
+        type: XPATH
+        value: //XCUIElementTypeOther[contains(@name,"Grandparent")]
+actions:
+  - id: click-voucher-if-existing
+    description: click into element if displayed
+    actionElements:
+      - element: *popup-voucher
+        inputType: click
+        condition: DISPLAYED
+        timeout: 3000

@@ -56,6 +56,11 @@ public class Steps {
     public void clickElement(String element) {
         test.clickElement(element);
     }
+    @Given("I perform {word} action")
+    public void i_perform_click_if_existing_action(String action) throws InterruptedException {
+        test.getAction(action);
+
+    }
 
     @Given("I wait for element {} to be {}")
     public void i_wait_for_element_fitbit_title_to_be_displayed(String element, String condition) {
