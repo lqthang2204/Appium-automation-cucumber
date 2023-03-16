@@ -27,7 +27,8 @@ elements:
       - device: IOS
         type: XPATH
         value: //XCUIElementTypeOther[contains(@name,"Grandparent")]
-  - id: confirm-option
+  - &confirm-option
+    id: confirm-option
     description: Checkbox for Grandparent
     locators:
       - device: API
@@ -42,18 +43,9 @@ elements:
         type: XPATH
         value: //XCUIElementTypeOther[contains(@name,"Grandparent")]
 actions:
-  - id: select-all-family-members
-    description: Selects all members of family
+  - id: confirm-option-vietnmese
+    description: click into element if displayed
     actionElements:
-      - element: option-grandparent
+      - element: *confirm-option
         inputType: click
-      - element: option-grandparent
-        inputType: click
-      - element: option-grandparent
-        inputType: click
-      - element: option-grandparent
-        inputType: click
-      - element: option-grandparent
-        inputType: click
-      - element: option-grandparent
-        inputType: click
+        condition: ENABLED
