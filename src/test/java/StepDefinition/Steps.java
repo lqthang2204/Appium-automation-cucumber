@@ -30,6 +30,7 @@ public class Steps {
     AndroidDriverProvider provider = new AndroidDriverProvider();
 //    WebDriver driver;
     public ThreadLocal<AppiumDriver> driver = new ThreadLocal<AppiumDriver>();
+    
 
     public void setDriver(AppiumDriver driver){
             this.driver.set(driver);
@@ -70,14 +71,15 @@ public class Steps {
     public void TypeToElement(String value, String element) {
         test.TypeValueToElement(value, element);
     }
-    @Given("I {word} into element have text {}")
-    public void ConditionHaveText(String condition, String text) {
-        test.ExecuteWithText(condition,text);
-    }
 
     @Given("I scroll to element {}")
     public void i_scroll_to_element_option_language_with_text(String element) {
       test.scrollToElement(element);
+    }
+    @Given("I verify the text for element {word} is {string}")
+    public void verifyElement(String element, String value) {
+        test.verifyElementHaveValue(element, value);
+
     }
     @After
     public void CloseApp(){

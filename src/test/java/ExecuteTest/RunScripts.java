@@ -275,35 +275,10 @@ public class RunScripts {
 //        By by = getBy(locator,"");
         Selenide.$(by).shouldBe(Condition.visible).setValue(value);
     }
-    public void ExecuteWithText(String condition, String text){
-        SelenideElement element = Selenide.$(new ByText(text));
-        switch (condition){
-            case "click":
-                element.click();
-                break;
-            case "clear":
-                element.clear();
-                break;
-            case "DISPLAYED":
-                element.shouldBe(Condition.appear);
-                break;
-            case "NOT_DISPLAYED":
-                element.shouldBe(Condition.disappear);
-                break;
-            case "EXIST":
-                element.shouldBe(Condition.exist);
-                break;
-            case "NOT_EXIST":
-                element.shouldBe(Condition.not(Condition.exist));
-                break;
-            case "ENABLED":
-                element.shouldBe(Condition.enabled);
-                break;
-            default:
-                throw new NotFoundException("Not found action "+ condition +" with text" + text);
-
-        }
-        Selenide.$(new ByText(text)).click();
+    public void verifyElementHaveValue(String element, String value){
+        By by = getBytoElement(element);
+        String expected = Selenide.$(by).getText();
+        Assert.assertEquals(expected, value);
     }
     public By getBytoElement(String element){
         List<String> list = getElementToText(element);
