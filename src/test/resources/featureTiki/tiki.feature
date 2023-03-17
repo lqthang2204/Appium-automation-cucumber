@@ -15,3 +15,6 @@ Feature: Login function
     And I wait for element quan-ly-don-hang to be DISPLAYED
     And I click element quan-ly-don-hang
     And I wait for element phone-number-field to be DISPLAYED
+    And I verify the text for element phone-number-field is ""
+    And I change the page spec to HomeTiki
+
