@@ -269,16 +269,36 @@ public class RunScripts {
         }
         return null;
     }
-    public void TypeValueToElement(String value,String element){
+    public void TypeValueToElement(String value,String element, Map<String, String> map){
         By by = getBytoElement(element);
 //        Locator locator = findLocator(element);
 //        By by = getBy(locator,"");
+        if(map.containsKey(value)){
+            value = map.get(value);
+        }
         Selenide.$(by).shouldBe(Condition.visible).setValue(value);
     }
-    public void verifyElementHaveValue(String element, String value){
+    public void verifyElementHaveValue(String element, String value, Map<String, String> map){
         By by = getBytoElement(element);
         String expected = Selenide.$(by).getText();
+        if(map!=null && map.containsKey(value)){
+            value = map.get(value);
+        }
         Assert.assertEquals(expected, value);
+    }
+    public void saveTextFromElement(String element, String key, Map<String, String> map){
+        try {
+            By by = getBytoElement(element);
+            Selenide.$(by).isDisplayed();
+            String valueOfElement = Selenide.$(by).getText();
+            map.put("KEY."+key, valueOfElement);
+            Assert.assertTrue(true);
+        }catch (Exception e){
+            e.printStackTrace();
+            Assert.assertTrue(false);
+        }
+
+
     }
     public By getBytoElement(String element){
         List<String> list = getElementToText(element);

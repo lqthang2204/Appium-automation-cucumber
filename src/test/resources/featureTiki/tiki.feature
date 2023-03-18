@@ -17,4 +17,12 @@ Feature: Login function
     And I wait for element phone-number-field to be DISPLAYED
     And I verify the text for element phone-number-field is ""
     And I change the page spec to HomeTiki
+    And I click element icon-at-page-home with text "Trang chủ"
+    And I wait for element search-field to be ENABLED
+    And I click element search-field
+    And I wait for element title-suggestion to be DISPLAYED
+    And I save text for element title-suggestion with key "title"
+    And I verify the text for element title-suggestion is "KEY.title"
+
+
 
