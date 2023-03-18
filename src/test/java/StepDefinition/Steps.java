@@ -30,7 +30,7 @@ public class Steps {
     AndroidDriverProvider provider = new AndroidDriverProvider();
 //    WebDriver driver;
     public ThreadLocal<AppiumDriver> driver = new ThreadLocal<AppiumDriver>();
-    
+    public Map<String, String> mapSaveText;
 
     public void setDriver(AppiumDriver driver){
             this.driver.set(driver);
@@ -42,12 +42,14 @@ public class Steps {
          setDriver(provider.getAndroidDriver());
          WebDriverRunner.setWebDriver(getDriver());
         this.mapFileYaml=  pageUtil.findFileToName(new File(System.getProperty("user.dir") + "/src/test/resources/pages"),this.mapFileYaml);
+        mapSaveText = new HashMap<>();
     }
 
     @Given("I open application")
     public void i_open_application() throws MalformedURLException {
         openApp();
         test.setWait(getDriver());
+
     }
     @Given("I change the page spec to {word}")
     public void changePage(String page) throws FileNotFoundException {
@@ -69,7 +71,7 @@ public class Steps {
     }
     @Given("I type {string} into element {}")
     public void TypeToElement(String value, String element) {
-        test.TypeValueToElement(value, element);
+        test.TypeValueToElement(value, element, this.mapSaveText);
     }
 
     @Given("I scroll to element {}")
@@ -78,8 +80,13 @@ public class Steps {
     }
     @Given("I verify the text for element {word} is {string}")
     public void verifyElement(String element, String value) {
-        test.verifyElementHaveValue(element, value);
+        test.verifyElementHaveValue(element, value, this.mapSaveText);
 
+    }
+    @Given("I save text for element {word} with key {string}")
+    public void i_save_text_for_element_title_suggestion_with_key(String element, String key) {
+        test.saveTextFromElement(element, key, this.mapSaveText);
+        System.out.println("value=============="+this.mapSaveText.get(key));
     }
     @After
     public void CloseApp(){
