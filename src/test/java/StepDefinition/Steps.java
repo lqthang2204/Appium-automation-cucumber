@@ -86,12 +86,17 @@ public class Steps {
     @Given("I save text for element {word} with key {string}")
     public void i_save_text_for_element_title_suggestion_with_key(String element, String key) {
         test.saveTextFromElement(element, key, this.mapSaveText);
-        System.out.println("value=============="+this.mapSaveText.get(key));
+
+    }
+    @Given("I click keyboard {word} button on element {word}")
+    public void i_click_keyboard_enter_button_on_element_search_product(String valueKeys, String element) {
+                test.clickKeyboard(valueKeys, element);
     }
     @After
     public void CloseApp(){
         System.out.println("close webdriver.................");
-        WebDriverRunner.closeWebDriver();
+//        WebDriverRunner.closeWebDriver();
+//        WebDriverRunner.clearBrowserCache();
 
     }
 }

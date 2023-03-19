@@ -41,3 +41,17 @@ elements:
       - device: IOS
         type: XPATH
         value: //XCUIElementTypeOther[contains(@name,"Grandparent")]
+  - id: search-product
+    description: User icon on UI
+    locators:
+      - device: API
+        value: cancercondition_bladdercancer_yes
+      - device: WEB
+        type: XPATH
+        value: //div[contains(text(),"Grandparent")]
+      - device: ANDROID
+        type: XPATH
+        value: //*[@resource-id="vn.tiki.app.tikiandroid:id/etQuery"]
+      - device: IOS
+        type: XPATH
+        value: //XCUIElementTypeOther[contains(@name,"Grandparent")]

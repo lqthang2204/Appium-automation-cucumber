@@ -5,11 +5,13 @@ import Utilities.Configuration;
 import com.codeborne.selenide.*;
 import com.codeborne.selenide.appium.AppiumClickOptions;
 import com.codeborne.selenide.selector.ByText;
-import io.appium.java_client.AppiumBy;
-import io.appium.java_client.AppiumFluentWait;
-import io.appium.java_client.PerformsTouchActions;
-import io.appium.java_client.TouchAction;
+import com.google.common.collect.ImmutableMap;
+import io.appium.java_client.*;
+import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.android.nativekey.AndroidKey;
+import io.appium.java_client.android.nativekey.KeyEvent;
 import io.appium.java_client.functions.ExpectedCondition;
+import io.cucumber.java.en.And;
 import io.cucumber.java.eo.Se;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.openqa.selenium.By;
@@ -32,7 +34,7 @@ import java.util.Map;
 
 
 public class RunScripts {
-    WebDriver appiumDriver;
+    AppiumDriver appiumDriver;
     public Map<String, Page> map = new HashMap<>();
     public Page page;
     public SelenideWait wait;
@@ -134,26 +136,30 @@ public class RunScripts {
                                     break;
 
                                 }
+                            }try {
+                                wait= new FluentWait(appiumDriver).withTimeout(Duration.ofMillis(timeout));
+                                switch (listActionElements.get(j).getCondition()){
+                                    case  "DISPLAYED":
+                                        wait.until(ExpectedConditions.visibilityOf(Selenide.$(by)));
+                                        break;
+                                    case "NOT_DISPLAYED":
+                                        wait.until(ExpectedConditions.invisibilityOf(Selenide.$(by)));
+                                        break;
+                                    case "ENABLED":
+                                        wait.until(ExpectedConditions.elementToBeClickable(Selenide.$(by)));
+                                        break;
+                                    case "NOT_ENABLED":
+                                        wait.until(ExpectedConditions.not(ExpectedConditions.elementToBeClickable(Selenide.$(by))));
+                                        break;
+                                }
+                                if(listActionElements.get(j).inputType!=""){
+                                    runType(by, listActionElements.get(j).inputType,"");
+                                }
                             }
-                            wait= new FluentWait(appiumDriver).withTimeout(Duration.ofMillis(timeout));
-                            switch (listActionElements.get(j).getCondition()){
-                                case  "DISPLAYED":
-                                    wait.until(ExpectedConditions.visibilityOf(Selenide.$(by)));
-                                    break;
-                                case "NOT_DISPLAYED":
-                                    wait.until(ExpectedConditions.invisibilityOf(Selenide.$(by)));
-                                    break;
-                                case "ENABLED":
-                                    wait.until(ExpectedConditions.elementToBeClickable(Selenide.$(by)));
-                                    break;
-                                case "NOT_ENABLED":
-                                    wait.until(ExpectedConditions.not(ExpectedConditions.elementToBeClickable(Selenide.$(by))));
-                                    break;
+                            catch (Exception e){
+                                System.out.println("fail is running action");
+                                e.printStackTrace();
                             }
-                            if(listActionElements.get(j).inputType!=""){
-                                runType(by, listActionElements.get(j).inputType,"");
-                            }
-
                         }
                         else{
                             runType(by, listActionElements.get(j).inputType,"");
@@ -194,7 +200,7 @@ public class RunScripts {
         Actions action = new Actions(this.appiumDriver);
         action.scrollToElement(Selenide.$(by));
     }
-    public void setWait(WebDriver driver) {
+    public void setWait(AppiumDriver driver) {
         this.appiumDriver = driver;
         wait = new SelenideWait(driver, com.codeborne.selenide.Configuration.timeout, com.codeborne.selenide.Configuration.pollingInterval);
     }
@@ -299,6 +305,20 @@ public class RunScripts {
         }
 
 
+    }
+    public void clickKeyboard(String valueKey, String element){
+        try {
+            By by = getBytoElement(element);
+            Selenide.$(by).sendKeys(Keys.valueOf(valueKey));
+            Assert.assertTrue(true);
+        }catch (Exception e){
+                e.printStackTrace();
+                Assert.assertTrue(false);
+        }
+
+    }
+    public AndroidDriver castAndroidDriver(AppiumDriver driver){
+        return  (AndroidDriver) driver;
     }
     public By getBytoElement(String element){
         List<String> list = getElementToText(element);
