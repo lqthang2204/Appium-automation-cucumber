@@ -12,17 +12,20 @@ Feature: Login function
     And I wait for element icon-at-page-home with text "Astra" to be DISPLAYED
     And I click element icon-at-page-home with text "navigation_navigate_profile"
     And I change the page spec to profile_user
-    And I wait for element quan-ly-don-hang to be DISPLAYED
-    And I click element quan-ly-don-hang
+    And I perform click-quan-ly-don-hang-if-exist action
     And I wait for element phone-number-field to be DISPLAYED
     And I verify the text for element phone-number-field is ""
+    And I wait for element back-button to be ENABLED
+    And I click element back-button
     And I change the page spec to HomeTiki
     And I click element icon-at-page-home with text "Trang chủ"
     And I wait for element search-field to be ENABLED
     And I click element search-field
     And I wait for element title-suggestion to be DISPLAYED
-    And I save text for element title-suggestion with key "title"
-    And I verify the text for element title-suggestion is "KEY.title"
+    And I type "giày adidas" into element search-product
+    And I click keyboard NUMPAD1 button on element search-product
+#    And I save text for element title-suggestion with key "title"
+#    And I verify the text for element title-suggestion is "KEY.title"
 
 
 

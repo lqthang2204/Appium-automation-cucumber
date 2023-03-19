@@ -20,7 +20,7 @@
 <!--    <test name="Google Pixel 2-Clone">-->
 <!--        <parameter name="udid" value="emulator-5554"></parameter>-->
 <!--        <classes>-->
-<!--            <class name="RunnerTest2"></class>-->
+<!--            <class name="RunnerTest"></class>-->
 <!--        </classes>-->
 <!--    </test>-->
 <!--    <test name="Google Pixel 2">-->

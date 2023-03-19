@@ -1,5 +1,6 @@
 elements:
-  - id: quan-ly-don-hang
+  - &quan-ly-don-hang
+    id: quan-ly-don-hang
     description: User icon on UI
     locators:
       - device: API
@@ -27,3 +28,45 @@ elements:
       - device: IOS
         type: XPATH
         value: //XCUIElementTypeOther[contains(@name,"Grandparent")]
+  - &my-purchase
+    id: my-purchase
+    description: User icon on UI
+    locators:
+      - device: API
+        value: cancercondition_bladdercancer_yes
+      - device: WEB
+        type: XPATH
+        value: //div[contains(text(),"Grandparent")]
+      - device: ANDROID
+        type: XPATH
+        value: //android.widget.ImageView[@content-desc="Đơn hàng của tôi"]
+      - device: IOS
+        type: XPATH
+        value: //XCUIElementTypeOther[contains(@name,"Grandparent")]
+  - &back-button
+    id: back-button
+    description: back button
+    locators:
+      - device: API
+        value: cancercondition_bladdercancer_yes
+      - device: WEB
+        type: XPATH
+        value: //div[contains(text(),"Grandparent")]
+      - device: ANDROID
+        type: XPATH
+        value: //*[@class="android.widget.Image"][1]
+      - device: IOS
+        type: XPATH
+        value: //XCUIElementTypeOther[contains(@name,"Grandparent")]
+actions:
+  - id: click-quan-ly-don-hang-if-exist
+    description: click into element if displayed
+    actionElements:
+      - element: *quan-ly-don-hang
+        inputType: click
+        condition: DISPLAYED
+        timeout: 8000
+      - element: *my-purchase
+        inputType: click
+        condition: DISPLAYED
+        timeout: 10000
