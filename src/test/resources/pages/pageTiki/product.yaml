@@ -1,0 +1,23 @@
+elements:
+  - &deny-button
+    id: deny-button
+    description: User icon on UI
+    locators:
+      - device: API
+        value: cancercondition_bladdercancer_yes
+      - device: WEB
+        type: XPATH
+        value: //div[contains(text(),"Grandparent")]
+      - device: ANDROID
+        type: XPATH
+        value: //*[@resource-id="com.android.permissioncontroller:id/permission_deny_button"]
+      - device: IOS
+        type: XPATH
+        value: //XCUIElementTypeOther[contains(@name,"Grandparent")]
+actions:
+  - id: click-deny-if-exist
+    description: click into element if displayed
+    actionElements:
+      - element: *deny-button
+        inputType: click
+        condition: DISPLAYED

@@ -92,6 +92,10 @@ public class Steps {
     public void i_click_keyboard_enter_button_on_element_search_product(String valueKeys, String element) {
                 test.clickKeyboard(valueKeys, element);
     }
+    @Given("I click {word} button in keyboard")
+    public void i_click_search_button_in_keyboard(String key) {
+        test.ClickKeyboard(key);
+    }
     @After
     public void CloseApp(){
         System.out.println("close webdriver.................");
