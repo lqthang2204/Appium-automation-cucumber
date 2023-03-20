@@ -22,8 +22,8 @@ Feature: Login function
     And I wait for element search-field to be ENABLED
     And I click element search-field
     And I wait for element title-suggestion to be DISPLAYED
-    And I type "giày adidas" into element search-product
-    And I click keyboard NUMPAD1 button on element search-product
+    And I type "giay adidas" into element search-product
+    And I click keyboard ENTER button on element search-product
 #    And I save text for element title-suggestion with key "title"
 #    And I verify the text for element title-suggestion is "KEY.title"
 

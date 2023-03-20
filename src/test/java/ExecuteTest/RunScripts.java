@@ -277,8 +277,8 @@ public class RunScripts {
     }
     public void TypeValueToElement(String value,String element, Map<String, String> map){
         By by = getBytoElement(element);
-//        Locator locator = findLocator(element);
-//        By by = getBy(locator,"");
+        Actions action = new Actions(this.appiumDriver);
+        action.scrollToElement(Selenide.$(by));
         if(map.containsKey(value)){
             value = map.get(value);
         }
@@ -286,6 +286,8 @@ public class RunScripts {
     }
     public void verifyElementHaveValue(String element, String value, Map<String, String> map){
         By by = getBytoElement(element);
+        Actions action = new Actions(this.appiumDriver);
+        action.scrollToElement(Selenide.$(by));
         String expected = Selenide.$(by).getText();
         if(map!=null && map.containsKey(value)){
             value = map.get(value);
