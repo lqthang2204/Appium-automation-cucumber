@@ -319,6 +319,16 @@ public class RunScripts {
         }
 
     }
+    public void ClickKeyboard(String key){
+        switch (key){
+            case "search" :
+                AndroidDriver androidDriver = (AndroidDriver) this.appiumDriver.executeScript("mobile: performEditorAction", ImmutableMap.of("action", "search"));
+                break;
+            default:
+                System.out.println("Not supper key have value "+ key);
+        }
+
+    }
     public AndroidDriver castAndroidDriver(AppiumDriver driver){
         return  (AndroidDriver) driver;
     }
