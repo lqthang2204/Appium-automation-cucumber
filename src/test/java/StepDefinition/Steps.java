@@ -102,10 +102,13 @@ public class Steps {
     public void CloseApp(){
         System.out.println("close webdriver.................");
         WebDriverRunner.closeWebDriver();
-        if(Hook.service.isRunning()){
-            System.out.println("============================== Stop services=========================");
-            Hook.service.stop();
+        if(Hook.service!=null){
+            if(Hook.service.isRunning()){
+                System.out.println("============================== Stop services=========================");
+                Hook.service.stop();
+            }
         }
+
 
 //        WebDriverRunner.clearBrowserCache();
 

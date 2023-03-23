@@ -42,12 +42,12 @@ public class RunnerTest extends AbstractTestNGCucumberTests {
 
         }
     }
-    @AfterSuite
-    public void closeService(){
-        if(Hook.service.isRunning()){
-            System.out.println("Closing service have url "+ Hook.service.getUrl());
-            Hook.service.stop();
-        }
-
-    }
+//    @AfterSuite
+//    public void closeService(){
+//        if(Hook.service.isRunning()){
+//            System.out.println("Closing service have url "+ Hook.service.getUrl());
+//            Hook.service.stop();
+//        }
+//
+//    }
 }

@@ -11,7 +11,7 @@
     <parameter name="port_number" value="4724"></parameter>
     <parameter name="timeout" value="60000"></parameter>
     <parameter name="pollingInterval" value="100"></parameter>
-    <parameter name="runServiceAuto" value="true"></parameter>
+    <parameter name="runServiceAuto" value="false"></parameter>
 <!--    <test name="Lenovo">-->
 <!--        <parameter name="udid" value="HVA222NA"></parameter>-->
 <!--        <classes>-->
