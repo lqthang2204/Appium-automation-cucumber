@@ -1,3 +1,4 @@
+import ManageDriver.Hook;
 import Utilities.Configuration;
 import com.codeborne.selenide.Config;
 import com.codeborne.selenide.Selenide;
@@ -16,8 +17,9 @@ import org.testng.annotations.*;
 public class RunnerTest extends AbstractTestNGCucumberTests {
 
     @BeforeTest(alwaysRun = true)
-    @Parameters({"automation_name","platform_name","udid","appPackage","appActivity","port_number","timeout","pollingInterval"})
-    public void start(String automation_name, String platform_name, String udid, String appPackage, String appActivity, String port_number, long timeout, long pollingInterval){
+    @Parameters({"automation_name","platform_name","udid","appPackage","appActivity","port_number","timeout","pollingInterval","runServiceAuto"})
+    public void start(String automation_name, String platform_name, String udid, String appPackage, String appActivity, String port_number, long timeout, long pollingInterval,String runServiceAuto){
+        System.out.println("=====================================reading config to XML file==========================================");
         if(System.getProperty("automation_name")==null){
             Configuration.AUTOMATION_NAME =  automation_name;
             Configuration.PLATFORM_NAME = platform_name;
@@ -27,6 +29,8 @@ public class RunnerTest extends AbstractTestNGCucumberTests {
             Configuration.PATH_SERVER = "http://127.0.0.1:"+port_number+"/wd/hub";
             com.codeborne.selenide.Configuration.timeout = timeout;
             com.codeborne.selenide.Configuration.pollingInterval = pollingInterval;
+            Configuration.RUN_SERVICE_AUTO = Boolean.parseBoolean(runServiceAuto);
+            Configuration.PORT_NUMBER = Integer.parseInt(port_number);
         }else{
             Configuration.AUTOMATION_NAME =  System.getProperty("automation_name");
             Configuration.PLATFORM_NAME = System.getProperty("platform_name");
@@ -38,10 +42,12 @@ public class RunnerTest extends AbstractTestNGCucumberTests {
 
         }
     }
+    @AfterSuite
+    public void closeService(){
+        if(Hook.service.isRunning()){
+            System.out.println("Closing service have url "+ Hook.service.getUrl());
+            Hook.service.stop();
+        }
 
-
-
-
-
-
+    }
 }

@@ -2,10 +2,12 @@ package StepDefinition;
 
 import ExecuteTest.RunScripts;
 import ManageDriver.AndroidDriverProvider;
+import ManageDriver.Hook;
 import Utilities.Configuration;
 import Utilities.PageUtil;
 import com.codeborne.selenide.WebDriverRunner;
 import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.BeforeAll;
@@ -27,7 +29,6 @@ public class Steps {
     public RunScripts test  = new RunScripts();;
     public Map<String, String> mapFileYaml = new HashMap<>();
     public PageUtil pageUtil =new PageUtil();
-    AndroidDriverProvider provider = new AndroidDriverProvider();
 //    WebDriver driver;
     public ThreadLocal<AppiumDriver> driver = new ThreadLocal<AppiumDriver>();
     public Map<String, String> mapSaveText;
@@ -38,8 +39,9 @@ public class Steps {
     public  AppiumDriver getDriver(){
         return this.driver.get();
     }
+    public AppiumDriverLocalService service;
     public void openApp() throws MalformedURLException {
-         setDriver(provider.getAndroidDriver());
+         setDriver(new Hook().getAndroidDriver());
          WebDriverRunner.setWebDriver(getDriver());
         this.mapFileYaml=  pageUtil.findFileToName(new File(System.getProperty("user.dir") + "/src/test/resources/pages"),this.mapFileYaml);
         mapSaveText = new HashMap<>();
@@ -99,7 +101,12 @@ public class Steps {
     @After
     public void CloseApp(){
         System.out.println("close webdriver.................");
-//        WebDriverRunner.closeWebDriver();
+        WebDriverRunner.closeWebDriver();
+        if(Hook.service.isRunning()){
+            System.out.println("============================== Stop services=========================");
+            Hook.service.stop();
+        }
+
 //        WebDriverRunner.clearBrowserCache();
 
     }

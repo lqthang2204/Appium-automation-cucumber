@@ -9,6 +9,8 @@ public class Configuration {
     public static String APP_PACKAGE;
     public static String APP_ACTIVITY;
     public static String PATH_SERVER;
+    public static boolean RUN_SERVICE_AUTO;
+    public static int PORT_NUMBER;
 
     public static void readConfig(String automation_name, String platform_name,String udid, String appPackage, String appActivity, String port_number){
         if(System.getProperty("automation_name")==null){
@@ -21,7 +23,7 @@ public class Configuration {
             Configuration.APP_ACTIVITY = System.getProperty("appActivity");
             String port = System.getProperty("port_number");
             Configuration.PATH_SERVER = "http://127.0.0.1:"+port+"/wd/hub";
-//        checkNull(Configuration)
+
             System.out.println("========udid============11 "+ Configuration.UD_ID);
             System.out.println("System.getProperty(\"appPackage\")======================111 "+ System.getProperty("appPackage"));
             System.out.println(" Configuration.PATH_SERVER 333 "+ Configuration.PATH_SERVER);
