@@ -5,15 +5,15 @@ import ManageDriver.AndroidDriverProvider;
 import ManageDriver.Hook;
 import Utilities.Configuration;
 import Utilities.PageUtil;
+import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.WebDriverRunner;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
-import io.cucumber.java.After;
-import io.cucumber.java.Before;
-import io.cucumber.java.BeforeAll;
-import io.cucumber.java.BeforeStep;
+import io.cucumber.java.*;
 import io.cucumber.java.en.Given;
 import org.openqa.selenium.By;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.BeforeTest;
@@ -26,7 +26,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Steps {
-    public RunScripts test  = new RunScripts();;
+    public RunScripts test  = new RunScripts();
+    Scenario scenario;
     public Map<String, String> mapFileYaml = new HashMap<>();
     public PageUtil pageUtil =new PageUtil();
 //    WebDriver driver;
@@ -99,7 +100,12 @@ public class Steps {
         test.ClickKeyboard(key);
     }
     @After
-    public void CloseApp(){
+    public void CloseApp(Scenario scenario){
+        this.scenario = scenario;
+        if(scenario.isFailed()){
+            final  byte[]  screenshot = ((TakesScreenshot)getDriver()).getScreenshotAs(OutputType.BYTES);
+            scenario.attach(screenshot, "image/png",scenario.getName());
+        }
         System.out.println("close webdriver.................");
         WebDriverRunner.closeWebDriver();
         if(Hook.service!=null){
@@ -108,6 +114,7 @@ public class Steps {
                 Hook.service.stop();
             }
         }
+
 
 
 //        WebDriverRunner.clearBrowserCache();

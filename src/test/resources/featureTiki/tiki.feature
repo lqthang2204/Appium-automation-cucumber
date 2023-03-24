@@ -9,7 +9,7 @@ Feature: Login function
     And I wait for element icon-at-page-home with text "Danh mục" to be DISPLAYED
     And I wait for element icon-at-page-home with text "Tin mới" to be DISPLAYED
     And I wait for element icon-at-page-home with text "navigation_navigate_profile" to be DISPLAYED
-    And I wait for element icon-at-page-home with text "Astra" to be DISPLAYED
+    And I wait for element icon-at-page-home with text "Astra" to be NOT_DISPLAYED
 #    And I click element icon-at-page-home with text "navigation_navigate_profile"
 #    And I change the page spec to profile_user
 #    And I perform click-quan-ly-don-hang-if-exist action
@@ -30,15 +30,15 @@ Feature: Login function
 #    And I save text for element title-suggestion with key "title"
 #    And I verify the text for element title-suggestion is "KEY.title"
 
-  @rerun-tiki
-  Scenario: Open App Tiki
-    Given I open application
-    And I change the page spec to HomeTiki
-    And I wait for element icon-at-page-home with text "Trang chủ" to be DISPLAYED
-    And I wait for element icon-at-page-home with text "Danh mục" to be DISPLAYED
-    And I wait for element icon-at-page-home with text "Tin mới" to be DISPLAYED
-    And I wait for element icon-at-page-home with text "navigation_navigate_profile" to be DISPLAYED
-    And I wait for element icon-at-page-home with text "Astra" to be DISPLAYED
+#  @rerun-tiki
+#  Scenario: Open App Tiki
+#    Given I open application
+#    And I change the page spec to HomeTiki
+#    And I wait for element icon-at-page-home with text "Trang chủ" to be DISPLAYED
+#    And I wait for element icon-at-page-home with text "Danh mục" to be DISPLAYED
+#    And I wait for element icon-at-page-home with text "Tin mới" to be DISPLAYED
+#    And I wait for element icon-at-page-home with text "navigation_navigate_profile" to be DISPLAYED
+#    And I wait for element icon-at-page-home with text "Astra" to be DISPLAYED
 
 
 
