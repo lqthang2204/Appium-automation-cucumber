@@ -205,55 +205,61 @@ public class RunScripts {
         wait = new SelenideWait(driver, com.codeborne.selenide.Configuration.timeout, com.codeborne.selenide.Configuration.pollingInterval);
     }
     public void WaitToCondition(String element, String condition) {
-        By by = getBytoElement(element);
+        try {
+            By by = getBytoElement(element);
 //        Locator locator = findLocator(element);
 //        By by = getBy(locator,"");
-        switch (condition) {
-            case "DISPLAYED":
-            Selenide.$(by).shouldBe(Condition.appear);
-                break;
-            case "NOT_DISPLAYED":
-                Selenide.$(by).shouldBe(Condition.disappear);
-                break;
-            case "EXIST":
-                Selenide.$(by).shouldBe(Condition.exist);
-                break;
-            case "NOT_EXIST":
-                Selenide.$(by).shouldBe(Condition.not(Condition.exist));
-                break;
-            case "ENABLED":
-                Selenide.$(by).shouldBe(Condition.enabled);
-                break;
-            case "NOT_ENABLED":
-                Selenide.$(by).shouldBe(Condition.disabled);
-                break;
-            case "SELECTED":
-                Selenide.$(by).shouldBe(Condition.selected);
-                break;
-            case "NOT_SELECTED":
-                Selenide.$(by).shouldNot((Condition.selected));
-                break;
-            case "CHECKED":
-                Selenide.$(by).shouldBe(Condition.checked);
-                break;
-            case "NOT_CHECKED":
-                Selenide.$(by).shouldNot((Condition.checked));
-                break;
-            case "FOCUSED":
-                Selenide.$(by).shouldBe(Condition.focused);
-                break;
-            case "NOT_FOCUSED":
-                Selenide.$(by).shouldNot((Condition.focused));
-                break;
-            case "HIDEN":
-                Selenide.$(by).shouldBe(Condition.hidden);
-                break;
-            case "NOT_HIDDEN":
-                Selenide.$(by).shouldNot((Condition.hidden));
-                break;
-            default:
-                throw new NotFoundException("Not Support Condition for wait " + condition);
+            switch (condition) {
+                case "DISPLAYED":
+                    Selenide.$(by).shouldBe(Condition.appear);
+                    break;
+                case "NOT_DISPLAYED":
+                    Selenide.$(by).shouldBe(Condition.disappear);
+                    break;
+                case "EXIST":
+                    Selenide.$(by).shouldBe(Condition.exist);
+                    break;
+                case "NOT_EXIST":
+                    Selenide.$(by).shouldBe(Condition.not(Condition.exist));
+                    break;
+                case "ENABLED":
+                    Selenide.$(by).shouldBe(Condition.enabled);
+                    break;
+                case "NOT_ENABLED":
+                    Selenide.$(by).shouldBe(Condition.disabled);
+                    break;
+                case "SELECTED":
+                    Selenide.$(by).shouldBe(Condition.selected);
+                    break;
+                case "NOT_SELECTED":
+                    Selenide.$(by).shouldNot((Condition.selected));
+                    break;
+                case "CHECKED":
+                    Selenide.$(by).shouldBe(Condition.checked);
+                    break;
+                case "NOT_CHECKED":
+                    Selenide.$(by).shouldNot((Condition.checked));
+                    break;
+                case "FOCUSED":
+                    Selenide.$(by).shouldBe(Condition.focused);
+                    break;
+                case "NOT_FOCUSED":
+                    Selenide.$(by).shouldNot((Condition.focused));
+                    break;
+                case "HIDEN":
+                    Selenide.$(by).shouldBe(Condition.hidden);
+                    break;
+                case "NOT_HIDDEN":
+                    Selenide.$(by).shouldNot((Condition.hidden));
+                    break;
+                default:
+                    throw new NotFoundException("Not Support Condition for wait " + condition);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            Assert.assertTrue(false);
         }
+
     }
 
     public List<String> getElementToText(String element) {
