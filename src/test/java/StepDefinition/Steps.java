@@ -97,7 +97,7 @@ public class Steps {
     }
     @Given("I click {word} button in keyboard")
     public void i_click_search_button_in_keyboard(String key) {
-        test.ClickKeyboard(key);
+        test.ClickKeyboard(key.toLowerCase());
     }
     @After
     public void CloseApp(Scenario scenario){
