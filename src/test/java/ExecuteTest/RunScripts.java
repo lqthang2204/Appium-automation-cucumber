@@ -10,6 +10,7 @@ import io.appium.java_client.*;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.nativekey.AndroidKey;
 import io.appium.java_client.android.nativekey.KeyEvent;
+import io.appium.java_client.android.nativekey.PressesKey;
 import io.appium.java_client.functions.ExpectedCondition;
 import io.cucumber.java.en.And;
 import io.cucumber.java.eo.Se;
@@ -326,9 +327,13 @@ public class RunScripts {
 
     }
     public void ClickKeyboard(String key){
+        AndroidDriver androidDriver;
         switch (key){
             case "search" :
-                AndroidDriver androidDriver = (AndroidDriver) this.appiumDriver.executeScript("mobile: performEditorAction", ImmutableMap.of("action", "search"));
+                 androidDriver = (AndroidDriver) this.appiumDriver.executeScript("mobile: performEditorAction", ImmutableMap.of("action", "search"));
+                break;
+            case "back" :
+                ((PressesKey)appiumDriver).pressKey(new KeyEvent(AndroidKey.BACK));
                 break;
             default:
                 System.out.println("Not supper key have value "+ key);
