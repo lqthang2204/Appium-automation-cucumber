@@ -11,6 +11,15 @@ import java.net.URL;
 
 public class Hook {
     public static AppiumDriverLocalService service;
+    public ThreadLocal<AppiumDriver> driver = new ThreadLocal<AppiumDriver>();
+
+    public ThreadLocal<AppiumDriver> getDriver() {
+        return driver;
+    }
+
+    public void setDriver(ThreadLocal<AppiumDriver> driver) {
+        this.driver = driver;
+    }
 
     public AppiumDriver getAndroidDriver(){
         if(Configuration.RUN_SERVICE_AUTO){
@@ -26,10 +35,11 @@ public class Hook {
             desiredCapabilities.setCapability("appActivity",Configuration.APP_ACTIVITY);
             URL appiumSerPath  = new URL(Configuration.PATH_SERVER);
             System.out.println("Configuration.PATH_SERVER=============================="+ Configuration.PATH_SERVER);
-            return new AndroidDriver(appiumSerPath, desiredCapabilities);
+           this.driver.set(new AndroidDriver(appiumSerPath, desiredCapabilities));
         }catch (Exception e){
             e.printStackTrace();
             throw new RuntimeException("[ERR] could not create appium session");
         }
+        return  driver.get();
     }
 }

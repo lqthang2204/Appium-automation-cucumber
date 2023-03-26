@@ -31,19 +31,12 @@ public class Steps {
     public Map<String, String> mapFileYaml = new HashMap<>();
     public PageUtil pageUtil =new PageUtil();
 //    WebDriver driver;
-    public ThreadLocal<AppiumDriver> driver = new ThreadLocal<AppiumDriver>();
     public Map<String, String> mapSaveText;
-
-    public void setDriver(AppiumDriver driver){
-            this.driver.set(driver);
-    }
-    public  AppiumDriver getDriver(){
-        return this.driver.get();
-    }
+    public AppiumDriver driver;
     public AppiumDriverLocalService service;
     public void openApp() throws MalformedURLException {
-         setDriver(new Hook().getAndroidDriver());
-         WebDriverRunner.setWebDriver(getDriver());
+        this.driver = new Hook().getAndroidDriver();
+         WebDriverRunner.setWebDriver(this.driver);
         this.mapFileYaml=  pageUtil.findFileToName(new File(System.getProperty("user.dir") + "/src/test/resources/pages"),this.mapFileYaml);
         mapSaveText = new HashMap<>();
     }
@@ -51,7 +44,7 @@ public class Steps {
     @Given("I open application")
     public void i_open_application() throws MalformedURLException {
         openApp();
-        test.setWait(getDriver());
+        test.setWait(this.driver);
 
     }
     @Given("I change the page spec to {word}")
@@ -102,8 +95,8 @@ public class Steps {
     @After
     public void CloseApp(Scenario scenario){
         this.scenario = scenario;
-        if(scenario.isFailed()){
-            final  byte[]  screenshot = ((TakesScreenshot)getDriver()).getScreenshotAs(OutputType.BYTES);
+        if(scenario.isFailed() && this.driver!=null){
+            final  byte[]  screenshot = ((TakesScreenshot)this.driver).getScreenshotAs(OutputType.BYTES);
             scenario.attach(screenshot, "image/png",scenario.getName());
         }
         System.out.println("close webdriver.................");
