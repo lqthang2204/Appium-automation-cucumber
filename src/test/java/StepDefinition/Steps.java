@@ -100,13 +100,13 @@ public class Steps {
             scenario.attach(screenshot, "image/png",scenario.getName());
         }
         System.out.println("close webdriver.................");
-        WebDriverRunner.closeWebDriver();
-        if(Hook.service!=null){
-            if(Hook.service.isRunning()){
-                System.out.println("============================== Stop services=========================");
-                Hook.service.stop();
-            }
-        }
+//        WebDriverRunner.closeWebDriver();
+//        if(Hook.service!=null){
+//            if(Hook.service.isRunning()){
+//                System.out.println("============================== Stop services=========================");
+//                Hook.service.stop();
+//            }
+//        }
 
 
 

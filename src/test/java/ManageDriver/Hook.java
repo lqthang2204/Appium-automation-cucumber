@@ -42,4 +42,11 @@ public class Hook {
         }
         return  driver.get();
     }
+    public void quit(){
+        this.driver.get().quit();
+        if(this.service!=null){
+            Hook.service.stop();
+
+        }
+    }
 }
