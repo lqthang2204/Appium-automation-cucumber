@@ -18,6 +18,17 @@ public class PageUtil {
         return map;
 
     }
+    public String getPath(String name){
+        String[] paths = System.getenv("PATH").split(System.getProperty("path.separator"));
+            for(int i=0;i<paths.length;i++){
+              if(paths[i].contains(name)){
+                    return  paths[i]+"/node.exe";
+              }
+            }
+        System.out.println("Not found"+ name +" in ENV");
+            return "";
+    }
+
 
 
 }
