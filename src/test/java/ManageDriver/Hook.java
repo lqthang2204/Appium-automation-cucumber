@@ -1,12 +1,14 @@
 package ManageDriver;
 
 import Utilities.Configuration;
+import Utilities.PageUtil;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import java.io.File;
 import java.net.URL;
 
 public class Hook {
@@ -23,7 +25,13 @@ public class Hook {
 
     public AppiumDriver getAndroidDriver(){
         if(Configuration.RUN_SERVICE_AUTO){
-            service = AppiumDriverLocalService.buildService(new AppiumServiceBuilder().usingPort(Configuration.PORT_NUMBER).withArgument(() -> "--base-path", "/wd/hub"));
+            //find path node in enviromen variable
+            String pathNode =  new PageUtil().getPath("nodejs");
+            if(pathNode!=""){
+                service = AppiumDriverLocalService.buildService(new AppiumServiceBuilder().usingDriverExecutable(new File(pathNode)).usingPort(Configuration.PORT_NUMBER).withArgument(() -> "--base-path", "/wd/hub"));
+            }else{
+                service = AppiumDriverLocalService.buildService(new AppiumServiceBuilder().usingPort(Configuration.PORT_NUMBER).withArgument(() -> "--base-path", "/wd/hub"));
+            }
             service.start();
         }
         try {
