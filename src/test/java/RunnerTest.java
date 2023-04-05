@@ -31,6 +31,7 @@ public class RunnerTest extends AbstractTestNGCucumberTests {
             com.codeborne.selenide.Configuration.pollingInterval = pollingInterval;
             Configuration.RUN_SERVICE_AUTO = Boolean.parseBoolean(runServiceAuto);
             Configuration.PORT_NUMBER = Integer.parseInt(port_number);
+
         }else{
             Configuration.AUTOMATION_NAME =  System.getProperty("automation_name");
             Configuration.PLATFORM_NAME = System.getProperty("platform_name");
