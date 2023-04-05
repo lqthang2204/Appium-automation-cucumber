@@ -9,6 +9,7 @@ import io.appium.java_client.service.local.AppiumServiceBuilder;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 
 public class Hook {
@@ -56,5 +57,17 @@ public class Hook {
             Hook.service.stop();
 
         }
+    }
+
+    public static void main(String[] args) throws IOException, InterruptedException {
+        ProcessBuilder process = new ProcessBuilder("cmd.exe", "/C", "start","emulator", "-avd", "Pixel_2_API_30");
+        Process start = process.directory(new File("C:\\Users\\admin\\AppData\\Local\\Android\\Sdk\\emulator")).start();
+//        process.command("emulator -avd Pixel_2_API_30");
+//        process.start();
+
+        Thread.sleep(10000);
+        process.
+//        adb -s emulator-5554 emu kill
+
     }
 }
