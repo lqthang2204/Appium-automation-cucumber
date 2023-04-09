@@ -13,7 +13,8 @@ elements:
       - device: IOS
         type: XPATH
         value: //XCUIElementTypeOther[contains(@name,"Grandparent")]
-  - id: search-field
+  - &search-field
+    id: search-field
     description: User icon on UI
     locators:
       - device: API
@@ -41,7 +42,8 @@ elements:
       - device: IOS
         type: XPATH
         value: //XCUIElementTypeOther[contains(@name,"Grandparent")]
-  - id: search-product
+  - &search-product
+    id: search-product
     description: User icon on UI
     locators:
       - device: API
@@ -55,3 +57,16 @@ elements:
       - device: IOS
         type: XPATH
         value: //XCUIElementTypeOther[contains(@name,"Grandparent")]
+actions:
+  - id: action-search-product
+    description: click into element if displayed
+    actionElements:
+      - element: *search-field
+        condition: DISPLAYED
+        inputType: click
+      - element: *search-product
+        condition: DISPLAYED
+        inputType: click
+      - element: *search-product
+        condition: DISPLAYED
+        inputType: text

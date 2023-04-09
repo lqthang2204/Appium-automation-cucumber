@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="All Test Suite" parallel="tests" thread-count="2">
+<suite name="All Test Suite" annotations="@rerun-tiki">
 <!--    <suite name="All Test Suite" parallel="tests" thread-count="3">-->
     <parameter name="automation_name" value="uiautomator2"></parameter>
     <parameter name="platform_name" value="android"></parameter>
@@ -11,7 +11,7 @@
     <parameter name="port_number" value="4724"></parameter>
     <parameter name="timeout" value="60000"></parameter>
     <parameter name="pollingInterval" value="100"></parameter>
-    <parameter name="runServiceAuto" value="true"></parameter>
+    <parameter name="runServiceAuto" value="false"></parameter>
 <!--    <test name="Lenovo">-->
 <!--        <parameter name="udid" value="HVA222NA"></parameter>-->
 <!--        <classes>-->
