@@ -9,6 +9,7 @@ import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.WebDriverRunner;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.*;
 import io.cucumber.java.en.Given;
 import org.openqa.selenium.By;
@@ -35,8 +36,11 @@ public class Steps {
     public AppiumDriver driver;
     public AppiumDriverLocalService service;
     public void openApp() throws MalformedURLException {
-        this.driver = new Hook().getAndroidDriver();
+         this.driver = new Hook().getAndroidDriver();
          WebDriverRunner.setWebDriver(this.driver);
+    }
+    @Before
+    public void setUp(){
         this.mapFileYaml=  pageUtil.findFileToName(new File(System.getProperty("user.dir") + "/src/test/resources/pages"),this.mapFileYaml);
         mapSaveText = new HashMap<>();
     }
@@ -57,9 +61,14 @@ public class Steps {
     }
     @Given("I perform {word} action")
     public void i_perform_click_if_existing_action(String action) throws InterruptedException {
-        test.getAction(action);
+        test.getAction(action,null, this.mapSaveText);
 
     }
+    @Given("I perform {word} action with override values")
+    public void i_perform_action_search_product_action_with_override_values(String action, DataTable table) throws InterruptedException {
+        test.getAction(action,table, this.mapSaveText);
+    }
+
 
     @Given("I wait for element {} to be {}")
     public void i_wait_for_element_fitbit_title_to_be_displayed(String element, String condition) {
@@ -100,7 +109,7 @@ public class Steps {
             scenario.attach(screenshot, "image/png",scenario.getName());
         }
         System.out.println("close webdriver.................");
-        WebDriverRunner.closeWebDriver();
+//        WebDriverRunner.closeWebDriver();
         if(Configuration.RUN_SERVICE_AUTO && Hook.service.isRunning()){
            Hook.service.stop();
         }

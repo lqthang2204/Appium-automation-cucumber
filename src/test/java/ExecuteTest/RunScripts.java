@@ -12,6 +12,7 @@ import io.appium.java_client.android.nativekey.AndroidKey;
 import io.appium.java_client.android.nativekey.KeyEvent;
 import io.appium.java_client.android.nativekey.PressesKey;
 import io.appium.java_client.functions.ExpectedCondition;
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.eo.Se;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -24,6 +25,7 @@ import org.openqa.selenium.support.ui.*;
 import org.testng.Assert;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -54,9 +56,8 @@ public class RunScripts {
             } catch (FileNotFoundException e) {
                 System.out.println("path file yaml " + pathFile);
                 throw new FileNotFoundException(e.getMessage());
-            }
-            catch (Exception ex){
-                throw  new RuntimeException(ex.getMessage());
+            } catch (Exception ex) {
+                throw new RuntimeException(ex.getMessage());
             }
 
         }
@@ -85,8 +86,8 @@ public class RunScripts {
     }
 
     public By getBy(Locator locator, String value) {
-        if(value==""){
-             value = locator.getValue();
+        if (value == "") {
+            value = locator.getValue();
         }
         switch (locator.getType()) {
             case "XPATH":
@@ -111,36 +112,41 @@ public class RunScripts {
     }
 
     public void clickElement(String element) {
-         By by = getBytoElement(element);
-         Selenide.$(by).shouldBe(Condition.enabled).click(AppiumClickOptions.tap());
+        By by = getBytoElement(element);
+        Selenide.$(by).shouldBe(Condition.enabled).click(AppiumClickOptions.tap());
     }
-    public void getAction(String action) throws InterruptedException {
+
+    public void getAction(String action, DataTable dataTable, Map<String, String> map) throws InterruptedException {
         boolean flag = false;
+        String data ="";
         try {
             List<Action> listActions = page.getActions();
             By by = null;
             long timeout;
             Wait wait = null;
-            for(int i=0;i<listActions.size();i++){
-                if(listActions.get(i).getId().equals(action)){
+            for (int i = 0; i < listActions.size(); i++) {
+                if (listActions.get(i).getId().equals(action)) {
                     List<ActionElements> listActionElements = listActions.get(i).getActionElements();
-                    for(int j=0;j<listActionElements.size();j++){
-                        if(listActionElements.get(j).getCondition()!=null){
-                            if(listActionElements.get(j).getTimeout()  !=0){
-                                flag = true;
+                    for (int j = 0; j < listActionElements.size(); j++) {
+                        if (listActionElements.get(j).getCondition() != null && listActionElements.get(j).getTimeout() != 0) {
+                            flag = true;
+                            timeout = listActionElements.get(j).getTimeout();
+                           Element element = listActionElements.get(j).getElement();
+                            if(dataTable!=null){
+                                Map<String, String> mapOverride = dataTable.asMap(String.class, String.class);
+                                 data = getTextFromAction(element.id,mapOverride, map);
                             }
-                            timeout = listActionElements.get(j).getTimeout()  ==0 ? com.codeborne.selenide.Configuration.timeout : listActionElements.get(j).getTimeout();
                             List<Locator> listLocator = listActionElements.get(j).getElement().getList();
-                            for(int k=0;k<listLocator.size();k++){
-                                if(listLocator.get(k).getDevice().equalsIgnoreCase(Configuration.PLATFORM_NAME)){
+                            for (int k = 0; k < listLocator.size(); k++) {
+                                if (listLocator.get(k).getDevice().equalsIgnoreCase(Configuration.PLATFORM_NAME)) {
                                     by = getBy(listLocator.get(k), "");
                                     break;
-
                                 }
-                            }try {
-                                wait= new FluentWait(appiumDriver).withTimeout(Duration.ofMillis(timeout));
-                                switch (listActionElements.get(j).getCondition()){
-                                    case  "DISPLAYED":
+                            }
+                            try {
+                                wait = new FluentWait(appiumDriver).withTimeout(Duration.ofMillis(timeout));
+                                switch (listActionElements.get(j).getCondition()) {
+                                    case "DISPLAYED":
                                         wait.until(ExpectedConditions.visibilityOf(Selenide.$(by)));
                                         break;
                                     case "NOT_DISPLAYED":
@@ -153,35 +159,62 @@ public class RunScripts {
                                         wait.until(ExpectedConditions.not(ExpectedConditions.elementToBeClickable(Selenide.$(by))));
                                         break;
                                 }
-                                if(listActionElements.get(j).inputType!=""){
-                                    runType(by, listActionElements.get(j).inputType,"");
+                                if (listActionElements.get(j).inputType != "") {
+                                    runType(by, listActionElements.get(j).inputType, data);
                                 }
-                            }
-                            catch (Exception e){
+                            } catch (Exception e) {
                                 System.out.println("fail is running action");
                                 e.printStackTrace();
                             }
+                        } else {
+                            Element element = listActionElements.get(j).getElement();
+                            if(dataTable!=null){
+                                Map<String, String> mapOverride = dataTable.asMap(String.class, String.class);
+                                data = getTextFromAction(element.id,mapOverride, map);
+                            }
+                            List<Locator> listLocator = listActionElements.get(j).getElement().getList();
+                            for (int k = 0; k < listLocator.size(); k++) {
+                                if (listLocator.get(k).getDevice().equalsIgnoreCase(Configuration.PLATFORM_NAME)) {
+                                    by = getBy(listLocator.get(k), "");
+                                    break;
+                                }
+                            }
+                            wait = new FluentWait(appiumDriver).withTimeout(Duration.ofMillis(com.codeborne.selenide.Configuration.timeout));
+                            switch (listActionElements.get(j).getCondition()) {
+                                case "DISPLAYED":
+                                    wait.until(ExpectedConditions.visibilityOf(Selenide.$(by)));
+                                    break;
+                                case "NOT_DISPLAYED":
+                                    wait.until(ExpectedConditions.invisibilityOf(Selenide.$(by)));
+                                    break;
+                                case "ENABLED":
+                                    wait.until(ExpectedConditions.elementToBeClickable(Selenide.$(by)));
+                                    break;
+                                case "NOT_ENABLED":
+                                    wait.until(ExpectedConditions.not(ExpectedConditions.elementToBeClickable(Selenide.$(by))));
+                                    break;
+                            }
+                            if (listActionElements.get(j).inputType != "") {
+                                runType(by, listActionElements.get(j).inputType, data);
+                            }
                         }
-                        else{
-                            runType(by, listActionElements.get(j).inputType,"");
-                        }
-
                     }
-
                 }
 
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             Assert.assertTrue(flag);
         }
 
 
     }
-    public void runType(By by, String status,String value){
+
+
+    public void runType(By by, String status, String value) {
         Actions action = new Actions(this.appiumDriver);
         action.scrollToElement(Selenide.$(by));
-        switch (status){
+        switch (status) {
             case "text":
                 Selenide.$(by).setValue(value);
                 break;
@@ -196,15 +229,17 @@ public class RunScripts {
     }
 
 
-    public void scrollToElement(String element){
+    public void scrollToElement(String element) {
         By by = getBytoElement(element);
         Actions action = new Actions(this.appiumDriver);
         action.scrollToElement(Selenide.$(by));
     }
+
     public void setWait(AppiumDriver driver) {
         this.appiumDriver = driver;
         wait = new SelenideWait(driver, com.codeborne.selenide.Configuration.timeout, com.codeborne.selenide.Configuration.pollingInterval);
     }
+
     public void WaitToCondition(String element, String condition) {
         try {
             By by = getBytoElement(element);
@@ -256,7 +291,7 @@ public class RunScripts {
                 default:
                     throw new NotFoundException("Not Support Condition for wait " + condition);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             Assert.assertTrue(false);
         }
@@ -282,78 +317,98 @@ public class RunScripts {
         }
         return null;
     }
-    public void TypeValueToElement(String value,String element, Map<String, String> map){
+
+    public void TypeValueToElement(String value, String element, Map<String, String> map) {
         By by = getBytoElement(element);
         Actions action = new Actions(this.appiumDriver);
         action.scrollToElement(Selenide.$(by));
-        if(map.containsKey(value)){
+        if (map.containsKey(value)) {
             value = map.get(value);
         }
         Selenide.$(by).shouldBe(Condition.visible).setValue(value);
     }
-    public void verifyElementHaveValue(String element, String value, Map<String, String> map){
+
+    public void verifyElementHaveValue(String element, String value, Map<String, String> map) {
         By by = getBytoElement(element);
         Actions action = new Actions(this.appiumDriver);
         action.scrollToElement(Selenide.$(by));
         String expected = Selenide.$(by).getText();
-        if(map!=null && map.containsKey(value)){
+        if (map != null && map.containsKey(value)) {
             value = map.get(value);
         }
         Assert.assertEquals(expected, value);
     }
-    public void saveTextFromElement(String element, String key, Map<String, String> map){
+
+    public void saveTextFromElement(String element, String key, Map<String, String> map) {
         try {
             By by = getBytoElement(element);
             Selenide.$(by).isDisplayed();
             String valueOfElement = Selenide.$(by).getText();
-            map.put("KEY."+key, valueOfElement);
+            map.put("KEY." + key, valueOfElement);
             Assert.assertTrue(true);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             Assert.assertTrue(false);
         }
 
 
     }
-    public void clickKeyboard(String valueKey, String element){
+
+    public void clickKeyboard(String valueKey, String element) {
         try {
             By by = getBytoElement(element);
             Selenide.$(by).sendKeys(Keys.valueOf(valueKey));
             Assert.assertTrue(true);
-        }catch (Exception e){
-                e.printStackTrace();
-                Assert.assertTrue(false);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.assertTrue(false);
         }
 
     }
-    public void ClickKeyboard(String key){
+
+    public void ClickKeyboard(String key) {
         AndroidDriver androidDriver;
-        switch (key){
-            case "search" :
-                 androidDriver = (AndroidDriver) this.appiumDriver.executeScript("mobile: performEditorAction", ImmutableMap.of("action", "search"));
+        switch (key) {
+            case "search":
+                androidDriver = (AndroidDriver) this.appiumDriver.executeScript("mobile: performEditorAction", ImmutableMap.of("action", "search"));
                 break;
-            case "back" :
-                ((PressesKey)appiumDriver).pressKey(new KeyEvent(AndroidKey.BACK));
+            case "back":
+                ((PressesKey) appiumDriver).pressKey(new KeyEvent(AndroidKey.BACK));
                 break;
             default:
-                System.out.println("Not supper key have value "+ key);
+                System.out.println("Not supper key have value " + key);
         }
 
     }
-    public AndroidDriver castAndroidDriver(AppiumDriver driver){
-        return  (AndroidDriver) driver;
+
+    public AndroidDriver castAndroidDriver(AppiumDriver driver) {
+        return (AndroidDriver) driver;
     }
-    public By getBytoElement(String element){
+
+    public By getBytoElement(String element) {
         List<String> list = getElementToText(element);
         Locator locator;
         By by;
-        if(list==null){
+        if (list == null) {
             locator = findLocator(element);
             by = getBy(locator, "");
-        }else{
+        } else {
             locator = findLocator(list.get(1));
             by = getBy(locator, list.get(0));
         }
         return by;
+    }
+
+    public String getTextFromAction(String element, Map<String, String> mapDataTable, Map<String, String> mapSavetext) {
+        String data = "";
+        if (mapDataTable.containsKey(element)) {
+            data = mapDataTable.get(element);
+            if (mapSavetext.containsKey(data)) {
+                data = mapSavetext.get(data);
+                return data;
+            }
+        }
+        return data;
+
     }
 }
