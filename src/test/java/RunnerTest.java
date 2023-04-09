@@ -11,7 +11,7 @@ import org.testng.annotations.*;
 
 
 @RunWith(Cucumber.class)
-@CucumberOptions(features = "src/test/resources/featureTiki", glue = {"StepDefinition"}, tags = "", plugin = {"json:target/cucumber.json", "pretty"})
+@CucumberOptions(features = "src/test/resources/featureTiki", glue = {"StepDefinition"}, tags = "@rerun-tiki", plugin = {"json:target/cucumber.json", "pretty"})
 
 
 public class RunnerTest extends AbstractTestNGCucumberTests {
