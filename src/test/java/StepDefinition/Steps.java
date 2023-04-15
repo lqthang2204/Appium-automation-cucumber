@@ -101,6 +101,10 @@ public class Steps {
     public void i_click_search_button_in_keyboard(String key) {
         test.ClickKeyboard(key.toLowerCase());
     }
+    @Given("I verify attribute element {} has css property {} with value {string}")
+    public void i_verify_attribute_element_user_field_has_css_property_placeholder_with_value(String element, String property, String value) {
+        test.VerifyProperty(element, property, value, mapSaveText);
+    }
     @After
     public void CloseApp(Scenario scenario){
         this.scenario = scenario;

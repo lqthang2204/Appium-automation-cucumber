@@ -380,6 +380,15 @@ public class RunScripts {
         }
 
     }
+    public void VerifyProperty(String element, String property, String value, Map<String, String> map){
+        By by =   getBytoElement(element);
+        String attribute = Selenide.$(by).getAttribute(property);
+        if(map.containsKey(value)){
+           value =  map.get(value);
+        }
+        System.out.println("attribute = "+ attribute);
+        Assert.assertEquals(attribute, value);
+    }
 
     public AndroidDriver castAndroidDriver(AppiumDriver driver) {
         return (AndroidDriver) driver;
@@ -398,6 +407,7 @@ public class RunScripts {
         }
         return by;
     }
+
 
     public String getTextFromAction(String element, Map<String, String> mapDataTable, Map<String, String> mapSavetext) {
         String data = "";
