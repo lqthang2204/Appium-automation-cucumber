@@ -1,0 +1,10 @@
+firstName: Teisha
+middleInitial: M
+lastName: Hessel
+dob: 631204200000
+userAddresses:
+  - {city: Montgomery, state: AL, streetOne: 1740 Carter Hill Rd, zip: '36106', phoneNumber: '4104567676'}
+userEthnicities:
+  - {value: Black or African American}
+userGenders:
+  - {value: Female}

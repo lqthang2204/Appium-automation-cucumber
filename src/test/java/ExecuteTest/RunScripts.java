@@ -1,6 +1,7 @@
 package ExecuteTest;
 
 import ElementsPages.*;
+import UserManagement.User;
 import Utilities.Configuration;
 import com.codeborne.selenide.*;
 import com.codeborne.selenide.appium.AppiumClickOptions;
@@ -419,6 +420,10 @@ public class RunScripts {
             }
         }
         return data;
+
+    }
+    public User getUser(){
+
 
     }
 }

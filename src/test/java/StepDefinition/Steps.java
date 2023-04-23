@@ -105,6 +105,10 @@ public class Steps {
     public void i_verify_attribute_element_user_field_has_css_property_placeholder_with_value(String element, String property, String value) {
         test.VerifyProperty(element, property, value, mapSaveText);
     }
+    @Given("I become a random user")
+    public void i_become_a_random_user() {
+
+    }
     @After
     public void CloseApp(Scenario scenario){
         this.scenario = scenario;

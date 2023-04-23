@@ -4,6 +4,8 @@ Feature: Login function
   @mc-test-tiki
   Scenario: Open App Tiki
 
+    And I become a random user
+#    And I am alabama_user created by the API
     Given I open application
     And I change the page spec to HomeTiki
     And I wait for element icon-at-page-home with text "Trang chủ" to be DISPLAYED
