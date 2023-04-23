@@ -3,6 +3,7 @@ package StepDefinition;
 import ExecuteTest.RunScripts;
 import ManageDriver.AndroidDriverProvider;
 import ManageDriver.Hook;
+import UserManagement.User;
 import Utilities.Configuration;
 import Utilities.PageUtil;
 import com.codeborne.selenide.Selenide;
@@ -23,7 +24,9 @@ import org.testng.annotations.Parameters;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
+import java.text.ParseException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Steps {
@@ -35,6 +38,7 @@ public class Steps {
     public Map<String, String> mapSaveText;
     public AppiumDriver driver;
     public AppiumDriverLocalService service;
+    public List<User> list;
     public void openApp() throws MalformedURLException {
          this.driver = new Hook().getAndroidDriver();
          WebDriverRunner.setWebDriver(this.driver);
@@ -106,8 +110,8 @@ public class Steps {
         test.VerifyProperty(element, property, value, mapSaveText);
     }
     @Given("I become a random user")
-    public void i_become_a_random_user() {
-
+    public void i_become_a_random_user() throws ParseException {
+       list =  test.getUser(this.list);
     }
     @After
     public void CloseApp(Scenario scenario){

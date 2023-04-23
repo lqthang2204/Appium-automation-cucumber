@@ -2,25 +2,24 @@ package ExecuteTest;
 
 import ElementsPages.*;
 import UserManagement.User;
+import UserManagement.UserAddress;
 import Utilities.Configuration;
+import Utilities.Util;
 import com.codeborne.selenide.*;
 import com.codeborne.selenide.appium.AppiumClickOptions;
-import com.codeborne.selenide.selector.ByText;
+import com.github.javafaker.Address;
+import com.github.javafaker.Faker;
+import com.github.javafaker.Name;
 import com.google.common.collect.ImmutableMap;
 import io.appium.java_client.*;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.nativekey.AndroidKey;
 import io.appium.java_client.android.nativekey.KeyEvent;
 import io.appium.java_client.android.nativekey.PressesKey;
-import io.appium.java_client.functions.ExpectedCondition;
 import io.cucumber.datatable.DataTable;
-import io.cucumber.java.en.And;
-import io.cucumber.java.eo.Se;
-import org.checkerframework.checker.nullness.qual.Nullable;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NotFoundException;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.*;
 import org.testng.Assert;
@@ -30,11 +29,9 @@ import org.yaml.snakeyaml.constructor.Constructor;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.text.ParseException;
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 public class RunScripts {
@@ -422,8 +419,92 @@ public class RunScripts {
         return data;
 
     }
-    public User getUser(){
+    public String getprofileUser(String value, List<User> list) throws ParseException {
+        if(value.contains("USER.")){
+            User user;
+            String[] arr = value.split(".");
+            if(Util.isNumber(arr[1]) && Util.checkLength(arr)){
+               user =   list.get(Integer.parseInt(arr[1]));
+            }else{
+                user = list.get(0);
+            }
+            switch (arr[1])
+            {
+                case "firstName" :
+                    value =  user.getFirstName();
+                    break;
+                case "lastName" :
+                    value =   user.getLastName();
+                break;
+                case "middleName" :
+                    value =   user.getMiddleName();
+                break;
+                case "fullName" :
+                    value =   user.getFullName();
+                break;
+                case "prefix" :
+                    value =   user.getPrefix();
+                break;
+                case "suffix" :
+                    value =   user.getSuffix();
+                break;
+                case "email" :
+                    value =   user.getEmail();
+                break;
+                case "password" :
+                    value =   user.getPassword();
+                break;
+                case "dob" :
+                    value =   Util.convertMilisecondsToDob(user.getDob());
+                break;
+                case "city" :
+                    value =   user.getUserAddresses().getCity();
+                break;
+                case "state" :
+                    value =   user.getUserAddresses().getState();
+                break;
+                case "street" :
+                    value =   user.getUserAddresses().getStreetOne();
+                break;
+                case "zip" :
+                    value =   user.getUserAddresses().getZip();
+                break;
+                case "phoneNumber" :
+                    value =   user.getUserAddresses().getPhoneNumber();
+                break;
+                default:
+                    System.out.println("not support key value");
+                    throw new RuntimeException();
+            }
+        }
+        return value;
 
-
+    }
+    public List<User> getUser(List<User> list) throws ParseException {
+        if(list == null){
+            list = new LinkedList<>();
+        }
+        Faker fakeUser = new Faker();
+        User user = new User();
+        UserAddress address = new UserAddress();
+        Name name = fakeUser.name();
+        Address addressFaker = fakeUser.address();
+        user.setFirstName(name.firstName());
+        user.setLastName(name.lastName());
+        user.setMiddleName(name.nameWithMiddle());
+        user.setFullName(name.fullName());
+        user.setPrefix(name.prefix());
+        user.setSuffix(name.suffix());
+        address.setCity(addressFaker.city());
+        address.setState(addressFaker.state());
+        address.setZip(addressFaker.zipCode());
+        address.setPhoneNumber(fakeUser.phoneNumber().phoneNumber());
+        address.setStreetOne(addressFaker.streetAddress());
+        user.setDob(Util.convertDobToMiliseconds(fakeUser.date().birthday()));
+        user.setEmail(fakeUser.bothify(name.fullName().replace(" ","")+"Test@gmail.com"));
+        user.setPassword(fakeUser.internet().password(6,9,true,true,true));
+        user.setUserAddresses(address);
+        list.add(user);
+        return list;
     }
 }
