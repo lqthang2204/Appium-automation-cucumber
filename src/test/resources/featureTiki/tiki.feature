@@ -18,6 +18,7 @@ Feature: Login function
     And I verify attribute element icon-at-page-home with text "navigation_navigate_profile" has css property class with value "android.widget.ImageView"
     And I verify attribute element icon-at-page-home with text "navigation_navigate_profile" has css property checked with value "false"
     And I verify attribute element icon-at-page-home with text "navigation_navigate_profile" has css property bounds with value "[708,1218][732,1242]"
+    And I wait for element icon-at-page-home with text "navigation_navigate_profile" to be ENABLED
     And I click element icon-at-page-home with text "navigation_navigate_profile"
     And I change the page spec to profile_user
     And I perform click-quan-ly-don-hang-if-exist action
@@ -30,8 +31,9 @@ Feature: Login function
     And I wait for element icon-at-page-home with text "Trang chủ" to be ENABLED
     And I click element icon-at-page-home with text "Trang chủ"
     And I wait for element search-field to be ENABLED
+    And I become a random user
     And I perform action-search-product action with override values
-      |search-product | giay adidas              |
+      | search-product | USER.1.email |
 #    And I click element search-field
 #    And I wait for element search-product to be DISPLAYED
 #    And I type "giay adidas" into element search-product
@@ -43,9 +45,9 @@ Feature: Login function
     And I change the page spec to product
     And I click element search-field
 #    And I change the page spec to HomeTiki
-    And I type "KEY.product-one" into element search-product
+#    And I type "KEY.product-one" into element search-product
     And I perform search-product action with override values
-      |search-product | KEY.product-one             |
+      |search-product | KEY.product-one    |
     And I click Search button in keyboard
     And I change the page spec to product
     And I perform click-deny-if-exist action
