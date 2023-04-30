@@ -65,12 +65,12 @@ public class Steps {
     }
     @Given("I perform {word} action")
     public void i_perform_click_if_existing_action(String action) throws InterruptedException {
-        test.getAction(action,null, this.mapSaveText);
+        test.getAction(action,null, this.mapSaveText, this.list);
 
     }
     @Given("I perform {word} action with override values")
     public void i_perform_action_search_product_action_with_override_values(String action, DataTable table) throws InterruptedException {
-        test.getAction(action,table, this.mapSaveText);
+        test.getAction(action,table, this.mapSaveText, this.list);
     }
 
 
@@ -79,8 +79,8 @@ public class Steps {
         test.WaitToCondition(element, condition);
     }
     @Given("I type {string} into element {}")
-    public void TypeToElement(String value, String element) {
-        test.TypeValueToElement(value, element, this.mapSaveText);
+    public void TypeToElement(String value, String element) throws ParseException {
+        test.TypeValueToElement(value, element, this.mapSaveText, this.list);
     }
 
     @Given("I scroll to element {}")
@@ -88,8 +88,8 @@ public class Steps {
       test.scrollToElement(element);
     }
     @Given("I verify the text for element {word} is {string}")
-    public void verifyElement(String element, String value) {
-        test.verifyElementHaveValue(element, value, this.mapSaveText);
+    public void verifyElement(String element, String value) throws ParseException {
+        test.verifyElementHaveValue(element, value, this.mapSaveText, this.list);
 
     }
     @Given("I save text for element {word} with key {string}")
@@ -106,12 +106,13 @@ public class Steps {
         test.ClickKeyboard(key.toLowerCase());
     }
     @Given("I verify attribute element {} has css property {} with value {string}")
-    public void i_verify_attribute_element_user_field_has_css_property_placeholder_with_value(String element, String property, String value) {
-        test.VerifyProperty(element, property, value, mapSaveText);
+    public void i_verify_attribute_element_user_field_has_css_property_placeholder_with_value(String element, String property, String value) throws ParseException {
+        test.VerifyProperty(element, property, value, mapSaveText, this.list);
     }
     @Given("I become a random user")
     public void i_become_a_random_user() throws ParseException {
        list =  test.getUser(this.list);
+
     }
     @After
     public void CloseApp(Scenario scenario){

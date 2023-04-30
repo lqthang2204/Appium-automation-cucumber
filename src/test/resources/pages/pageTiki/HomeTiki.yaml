@@ -70,3 +70,15 @@ actions:
       - element: *search-product
         condition: DISPLAYED
         inputType: text
+  - id: action-search-product-with-email
+    description: click into element if displayed
+    actionElements:
+      - element: *search-field
+        condition: DISPLAYED
+        inputType: click
+      - element: *search-product
+        condition: DISPLAYED
+        inputType: click
+      - element: *search-product
+        condition: DISPLAYED
+        inputType: text

@@ -114,9 +114,9 @@ public class RunScripts {
         Selenide.$(by).shouldBe(Condition.enabled).click(AppiumClickOptions.tap());
     }
 
-    public void getAction(String action, DataTable dataTable, Map<String, String> map) throws InterruptedException {
+    public void getAction(String action, DataTable dataTable, Map<String, String> map, List<User> list) throws InterruptedException {
         boolean flag = false;
-        String data ="";
+
         try {
             List<Action> listActions = page.getActions();
             By by = null;
@@ -130,10 +130,6 @@ public class RunScripts {
                             flag = true;
                             timeout = listActionElements.get(j).getTimeout();
                            Element element = listActionElements.get(j).getElement();
-                            if(dataTable!=null){
-                                Map<String, String> mapOverride = dataTable.asMap(String.class, String.class);
-                                 data = getTextFromAction(element.id,mapOverride, map);
-                            }
                             List<Locator> listLocator = listActionElements.get(j).getElement().getList();
                             for (int k = 0; k < listLocator.size(); k++) {
                                 if (listLocator.get(k).getDevice().equalsIgnoreCase(Configuration.PLATFORM_NAME)) {
@@ -158,7 +154,7 @@ public class RunScripts {
                                         break;
                                 }
                                 if (listActionElements.get(j).inputType != "") {
-                                    runType(by, listActionElements.get(j).inputType, data);
+                                    runType(by, listActionElements.get(j).inputType,dataTable, element.id, map, list);
                                 }
                             } catch (Exception e) {
                                 System.out.println("fail is running action");
@@ -166,10 +162,6 @@ public class RunScripts {
                             }
                         } else {
                             Element element = listActionElements.get(j).getElement();
-                            if(dataTable!=null){
-                                Map<String, String> mapOverride = dataTable.asMap(String.class, String.class);
-                                data = getTextFromAction(element.id,mapOverride, map);
-                            }
                             List<Locator> listLocator = listActionElements.get(j).getElement().getList();
                             for (int k = 0; k < listLocator.size(); k++) {
                                 if (listLocator.get(k).getDevice().equalsIgnoreCase(Configuration.PLATFORM_NAME)) {
@@ -193,7 +185,7 @@ public class RunScripts {
                                     break;
                             }
                             if (listActionElements.get(j).inputType != "") {
-                                runType(by, listActionElements.get(j).inputType, data);
+                                runType(by, listActionElements.get(j).inputType,dataTable, element.id, map, list);
                             }
                         }
                     }
@@ -209,12 +201,17 @@ public class RunScripts {
     }
 
 
-    public void runType(By by, String status, String value) {
+    public void runType(By by, String status,DataTable dataTable, String element_id, Map<String, String> map, List<User> list) throws ParseException {
         Actions action = new Actions(this.appiumDriver);
         action.scrollToElement(Selenide.$(by));
+        String data="";
         switch (status) {
             case "text":
-                Selenide.$(by).setValue(value);
+                if(dataTable!=null){
+                    Map<String, String> mapOverride = dataTable.asMap(String.class, String.class);
+                     data = getTextFromAction(element_id,mapOverride, map,list);
+                }
+                Selenide.$(by).setValue(data);
                 break;
             case "click":
                 Selenide.$(by).click();
@@ -316,23 +313,27 @@ public class RunScripts {
         return null;
     }
 
-    public void TypeValueToElement(String value, String element, Map<String, String> map) {
+    public void TypeValueToElement(String value, String element, Map<String, String> map, List<User> list) throws ParseException {
         By by = getBytoElement(element);
         Actions action = new Actions(this.appiumDriver);
         action.scrollToElement(Selenide.$(by));
         if (map.containsKey(value)) {
             value = map.get(value);
+        }else if(value.contains("USER")){
+            value = getprofileUser(value, list);
         }
         Selenide.$(by).shouldBe(Condition.visible).setValue(value);
     }
 
-    public void verifyElementHaveValue(String element, String value, Map<String, String> map) {
+    public void verifyElementHaveValue(String element, String value, Map<String, String> map, List<User> list) throws ParseException {
         By by = getBytoElement(element);
         Actions action = new Actions(this.appiumDriver);
         action.scrollToElement(Selenide.$(by));
         String expected = Selenide.$(by).getText();
         if (map != null && map.containsKey(value)) {
             value = map.get(value);
+        }else if(list !=null && value.contains("USER")){
+           value = getprofileUser(value, list);
         }
         Assert.assertEquals(expected, value);
     }
@@ -378,11 +379,13 @@ public class RunScripts {
         }
 
     }
-    public void VerifyProperty(String element, String property, String value, Map<String, String> map){
+    public void VerifyProperty(String element, String property, String value, Map<String, String> map, List<User> list) throws ParseException {
         By by =   getBytoElement(element);
         String attribute = Selenide.$(by).getAttribute(property);
         if(map.containsKey(value)){
            value =  map.get(value);
+        }else if(list!=null && value.contains("USER")){
+                value = getprofileUser(value, list);
         }
         System.out.println("attribute = "+ attribute);
         Assert.assertEquals(attribute, value);
@@ -407,13 +410,15 @@ public class RunScripts {
     }
 
 
-    public String getTextFromAction(String element, Map<String, String> mapDataTable, Map<String, String> mapSavetext) {
+    public String getTextFromAction(String element, Map<String, String> mapDataTable, Map<String, String> mapSavetext, List<User> list) throws ParseException {
         String data = "";
         if (mapDataTable.containsKey(element)) {
             data = mapDataTable.get(element);
             if (mapSavetext.containsKey(data)) {
                 data = mapSavetext.get(data);
                 return data;
+            }else if(data.contains("USER")){
+                data =   getprofileUser(data, list);
             }
         }
         return data;
@@ -421,14 +426,17 @@ public class RunScripts {
     }
     public String getprofileUser(String value, List<User> list) throws ParseException {
         if(value.contains("USER.")){
+            String option ="";
             User user;
-            String[] arr = value.split(".");
+            String[] arr = value.split("\\.");
             if(Util.isNumber(arr[1]) && Util.checkLength(arr)){
-               user =   list.get(Integer.parseInt(arr[1]));
+               user =   list.get(Integer.parseInt(arr[1])-1);
+               option = arr[2];
             }else{
                 user = list.get(0);
+                option = arr[1];
             }
-            switch (arr[1])
+            switch (option)
             {
                 case "firstName" :
                     value =  user.getFirstName();
@@ -505,6 +513,7 @@ public class RunScripts {
         user.setPassword(fakeUser.internet().password(6,9,true,true,true));
         user.setUserAddresses(address);
         list.add(user);
+        System.out.println("user == "+ user.getEmail());
         return list;
     }
 }
