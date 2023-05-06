@@ -1,10 +1,12 @@
 firstName: Teisha
-middleInitial: M
+middleName: M
 lastName: Hessel
 dob: 631204200000
+prefix: Dr.
+suffix: Ms
+email: test@gmail.com
+password: dGVzdFBhc3dvcmQxMjMh
 userAddresses:
-  - {city: Montgomery, state: AL, streetOne: 1740 Carter Hill Rd, zip: '36106', phoneNumber: '4104567676'}
-userEthnicities:
-  - {value: Black or African American}
-userGenders:
-  - {value: Female}
+  {city: Montgomery, state: AL, streetOne: 1740 Carter Hill Rd, zip: '36106', phoneNumber: '4104567676'}
+Ethnicities: viet nam
+Genders: Female

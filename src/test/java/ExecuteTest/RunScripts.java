@@ -4,6 +4,7 @@ import ElementsPages.*;
 import UserManagement.User;
 import UserManagement.UserAddress;
 import Utilities.Configuration;
+import Utilities.ManageYamlFile;
 import Utilities.Util;
 import com.codeborne.selenide.*;
 import com.codeborne.selenide.appium.AppiumClickOptions;
@@ -26,6 +27,7 @@ import org.testng.Assert;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -39,6 +41,7 @@ public class RunScripts {
     public Map<String, Page> map = new HashMap<>();
     public Page page;
     public SelenideWait wait;
+    public ManageYamlFile yamlFile;
 
     public Page changePageSpec(String pageYaml, Map<String, String> mapFileYaml) throws FileNotFoundException {
         String pathFile = null;
@@ -500,7 +503,7 @@ public class RunScripts {
         user.setFirstName(name.firstName());
         user.setLastName(name.lastName());
         user.setMiddleName(name.nameWithMiddle());
-        user.setFullName(name.fullName());
+        user.setFullName(user.getFirstName()+" "+user.getMiddleName()+ " " +user.getLastName());
         user.setPrefix(name.prefix());
         user.setSuffix(name.suffix());
         address.setCity(addressFaker.city());
@@ -516,4 +519,12 @@ public class RunScripts {
         System.out.println("user == "+ user.getEmail());
         return list;
     }
+    public List<User> getUserFormFile(List<User> list, String nameFile){
+        yamlFile = new ManageYamlFile();
+        list = yamlFile.getUserFormFile(nameFile, list);
+        System.out.println("list 1= "+ list.get(0).getDob());
+        System.out.println("list 1= "+ list.get(1).getDob());
+        return  list;
+    }
+
 }
