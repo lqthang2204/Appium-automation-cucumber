@@ -3,9 +3,8 @@ Feature: Login function
 
   @mc-test-tiki
   Scenario: Open App Tiki
-
     And I become a random user
-#    And I am alabama_user created by the API
+    And I am user1 created by the file
     Given I open application
     And I change the page spec to HomeTiki
     And I wait for element icon-at-page-home with text "Trang chủ" to be DISPLAYED
@@ -33,7 +32,7 @@ Feature: Login function
     And I wait for element search-field to be ENABLED
     And I become a random user
     And I perform action-search-product action with override values
-      | search-product | USER.1.email |
+      | search-product | USER.1.dob |
 #    And I click element search-field
 #    And I wait for element search-product to be DISPLAYED
 #    And I type "giay adidas" into element search-product

@@ -114,6 +114,11 @@ public class Steps {
        list =  test.getUser(this.list);
 
     }
+    @Given("I am {word} created by the file")
+    public void i_am_alabama_user_created_by_the_file(String nameFile) {
+        list = test.getUserFormFile(this.list, nameFile);
+
+    }
     @After
     public void CloseApp(Scenario scenario){
         this.scenario = scenario;
