@@ -45,7 +45,7 @@ public class ManageYamlFile {
         user.setDob(Long.parseLong(getStringFormKey("dob",object)));
         user.setPrefix(getStringFormKey("prefix",object));
         user.setSuffix(getStringFormKey("suffix",object));
-        user.setEmail(getStringFormKey("email",object));
+        user.setEmail(Util.getRandomEmail(getStringFormKey("email",object)));
         user.setEthnicities(getStringFormKey("Ethnicities",object));
         user.setGender(getStringFormKey("Genders",object));
         user.setPassword(Util.DecryptTextWithoutKey(getStringFormKey("password",object)));
