@@ -522,8 +522,7 @@ public class RunScripts {
     public List<User> getUserFormFile(List<User> list, String nameFile){
         yamlFile = new ManageYamlFile();
         list = yamlFile.getUserFormFile(nameFile, list);
-        System.out.println("list 1= "+ list.get(0).getDob());
-        System.out.println("list 1= "+ list.get(1).getDob());
+        System.out.println("list 1= "+ list.get(0).getEmail());
         return  list;
     }
 
